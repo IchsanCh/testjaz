@@ -15,25 +15,40 @@ class ArticlesTable
     {
         return $table
             ->columns([
-                TextColumn::make('article_category_id')
-                    ->numeric()
-                    ->sortable(),
+                ImageColumn::make('cover_image')
+                    ->label('Sampul'),
                 TextColumn::make('title')
+                    ->label('Judul')
                     ->searchable(),
-                TextColumn::make('slug')
+                TextColumn::make('category.name')
+                    ->label('Kategori')
+                    ->sortable()
                     ->searchable(),
-                ImageColumn::make('cover_image'),
                 TextColumn::make('status')
-                    ->searchable(),
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'published' => 'success',
+                        'draft' => 'gray',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'published' => 'Published',
+                        'draft' => 'Draft',
+                        default => $state,
+                    }),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Dibuat Pada')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Diperbarui Pada')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

@@ -15,14 +15,23 @@ class SectionForm
         return $schema
             ->components([
                 TextInput::make('key')
-                    ->required(),
-                TextInput::make('title'),
+                    ->label('Kunci Section')
+                    ->helperText('Contoh: tentang, proses, kenapa_pilih — dipakai kode buat manggil section ini, jangan diubah sembarangan kalau section sudah dipakai di halaman')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                TextInput::make('title')
+                    ->label('Judul'),
                 Textarea::make('body')
+                    ->label('Deskripsi')
                     ->columnSpanFull(),
                 FileUpload::make('image')
-                    ->image(),
+                    ->label('Gambar')
+                    ->image()
+                    ->maxSize(2048)
+                    ->imageEditor(),
                 Toggle::make('is_visible')
-                    ->required(),
+                    ->label('Tampilkan di Halaman?')
+                    ->default(true),
             ]);
     }
 }

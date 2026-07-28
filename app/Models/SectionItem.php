@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['section_key', 'title', 'description', 'image', 'sort_order'])]
+#[Fillable(['section_id', 'title', 'description', 'image', 'sort_order'])]
 class SectionItem extends Model
 {
-    // Panggil: SectionItem::forSection('proses')
-    public function scopeForSection($query, string $sectionKey)
+    public function section(): BelongsTo
     {
-        return $query->where('section_key', $sectionKey)->orderBy('sort_order');
+        return $this->belongsTo(Section::class);
     }
 }

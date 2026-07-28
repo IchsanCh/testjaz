@@ -4,11 +4,8 @@ namespace App\Providers\Filament;
 
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Pages\Dashboard;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
 use Filament\Navigation\NavigationGroup;
-use Filament\Widgets\FilamentInfoWidget;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -28,21 +25,17 @@ class adminPanelProvider extends PanelProvider
             ->default()
             ->id('hijaz/admin')
             ->path('hijaz/admin')
+            ->brandName('AL HIJAZ')
             ->login()
             ->sidebarCollapsibleOnDesktop()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::hex('#6B1E23'), // maroon, sesuai palet brand
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
+            // Dashboard, ManageSiteSettings, & ManageHeroContent otomatis ke-daftar
+            // lewat discoverPages di bawah, gak perlu didaftarin manual lagi di sini
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
-            ])
             ->navigationGroups([
                 NavigationGroup::make('Konten'),
                 NavigationGroup::make('Produk'),

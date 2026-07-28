@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\Articles\Schemas;
 
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class ArticleForm
 {
@@ -13,20 +15,41 @@ class ArticleForm
     {
         return $schema
             ->components([
-                TextInput::make('article_category_id')
-                    ->numeric(),
+                Select::make('article_category_id')
+                    ->label('Kategori')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 TextInput::make('title')
+                    ->label('Judul')
+                    ->live(debounce: 500)
+                    ->afterStateUpdated(fn (string $state, callable $set) => $set('slug', Str::slug($state)))
                     ->required(),
                 TextInput::make('slug')
-                    ->required(),
+                    ->label('Slug (URL)')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->disabled()
+                    ->dehydrated(),
                 FileUpload::make('cover_image')
-                    ->image(),
-                Textarea::make('content')
+                    ->label('Gambar Sampul')
+                    ->image()
+                    ->maxSize(2048)
+                    ->imageEditor()
+                    ->columnSpanFull(),
+                RichEditor::make('content')
+                    ->label('Konten')
                     ->required()
                     ->columnSpanFull(),
-                TextInput::make('status')
-                    ->required()
-                    ->default('draft'),
+                Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                    ])
+                    ->default('draft')
+                    ->required(),
             ]);
     }
 }

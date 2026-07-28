@@ -6,7 +6,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -17,18 +16,22 @@ class SectionsTable
         return $table
             ->columns([
                 TextColumn::make('key')
+                    ->label('Kunci Section')
                     ->searchable(),
                 TextColumn::make('title')
+                    ->label('Judul')
                     ->searchable(),
-                ImageColumn::make('image'),
                 IconColumn::make('is_visible')
+                    ->label('Tampil?')
                     ->boolean(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Dibuat Pada')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Diperbarui Pada')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

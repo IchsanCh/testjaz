@@ -15,23 +15,21 @@ class SectionItemsTable
     {
         return $table
             ->columns([
-                TextColumn::make('section_key')
-                    ->searchable(),
+                TextColumn::make('section.title')
+                    ->label('Bagian dari Section')
+                    ->badge()
+                    ->sortable(),
+                ImageColumn::make('image')
+                    ->label('Gambar'),
                 TextColumn::make('title')
+                    ->label('Judul')
                     ->searchable(),
-                ImageColumn::make('image'),
                 TextColumn::make('sort_order')
+                    ->label('Urutan')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('sort_order')
             ->filters([
                 //
             ])

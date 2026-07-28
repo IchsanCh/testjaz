@@ -9,14 +9,14 @@ return new class () extends Migration {
     {
         Schema::create('section_items', function (Blueprint $table) {
             $table->id();
-            $table->string('section_key'); // cocokin ke sections.key, misal 'proses' atau 'kenapa_pilih'
+            $table->foreignId('section_id')
+                ->constrained()
+                ->cascadeOnDelete(); // kalau section-nya dihapus, item di dalamnya ikut kehapus
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();
-
-            $table->index('section_key');
         });
     }
 

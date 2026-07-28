@@ -4,27 +4,28 @@ namespace App\Filament\Resources\ContactSubmissions\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class ContactSubmissionForm
 {
+    // Cuma dipakai buat modal "Lihat detail" (read-only), gak ada create/edit
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->required(),
+                    ->label('Nama')
+                    ->disabled(),
                 TextInput::make('whatsapp_number')
-                    ->required(),
+                    ->label('Nomor WhatsApp')
+                    ->disabled(),
                 TextInput::make('email')
-                    ->label('Email address')
-                    ->email(),
+                    ->label('Email')
+                    ->disabled(),
                 Textarea::make('message')
-                    ->required()
+                    ->label('Pesan')
+                    ->disabled()
                     ->columnSpanFull(),
-                Toggle::make('is_read')
-                    ->required(),
             ]);
     }
 }

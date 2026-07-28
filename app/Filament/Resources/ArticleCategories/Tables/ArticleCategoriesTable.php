@@ -15,15 +15,21 @@ class ArticleCategoriesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nama Kategori')
                     ->searchable(),
                 TextColumn::make('slug')
-                    ->searchable(),
+                    ->label('Slug'),
+                TextColumn::make('articles_count')
+                    ->label('Jumlah Artikel')
+                    ->counts('articles'),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Dibuat Pada')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Diperbarui Pada')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

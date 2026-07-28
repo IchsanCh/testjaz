@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Products\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -14,23 +15,34 @@ class ProductsTable
     {
         return $table
             ->columns([
-                TextColumn::make('product_category_id')
-                    ->numeric()
-                    ->sortable(),
+                ImageColumn::make('images')
+                    ->label('Gambar')
+                    ->circular(false)
+                    ->stacked()
+                    ->limit(1),
+                TextColumn::make('category.name')
+                    ->label('Kategori')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('name')
+                    ->label('Nama Motif')
                     ->searchable(),
                 TextColumn::make('sort_order')
+                    ->label('Urutan')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Dibuat Pada')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Diperbarui Pada')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('sort_order')
             ->filters([
                 //
             ])
