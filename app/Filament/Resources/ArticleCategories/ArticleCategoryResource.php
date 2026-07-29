@@ -22,7 +22,7 @@ class ArticleCategoryResource extends Resource
     protected static string|UnitEnum|null $navigationGroup = 'Artikel';
     protected static ?string $modelLabel = 'Kategori Artikel';
     protected static ?string $pluralModelLabel = 'Kategori Artikel';
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolder;
 
     public static function form(Schema $schema): Schema
     {
