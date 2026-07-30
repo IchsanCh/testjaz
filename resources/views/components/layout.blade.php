@@ -56,7 +56,14 @@
 
     {{ $slot }}
 
-    <div id="cursor-dot" class="cursor-dot" aria-hidden="true"></div>
+    {{-- Entrance overlay --}}
+    <div id="entrance" class="entrance" aria-hidden="true">
+        <span>AL HIJAZ</span>
+    </div>
+
+    <div id="cursor-ring" class="cursor-ring" aria-hidden="true">
+        <span class="cursor-ring__label" id="cursor-ring-label"></span>
+    </div>
 
     {{-- Shortcut ketik "admin" buat lompat ke panel — sengaja gak ada tombol login tampil di publik --}}
     <script>
