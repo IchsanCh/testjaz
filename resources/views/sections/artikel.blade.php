@@ -9,8 +9,8 @@
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 md:mb-20 reveal">
             <div class="max-w-xl">
                 <div class="flex items-center gap-3 mb-6">
-                    <span class="h-px w-10 bg-primary"></span>
-                    <span class="text-primary font-sans text-xs md:text-sm tracking-[0.3em] uppercase">
+                    <span class="h-px w-10 bg-brand"></span>
+                    <span class="text-brand font-sans text-xs md:text-sm tracking-[0.3em] uppercase">
                         Artikel
                     </span>
                 </div>
@@ -19,7 +19,7 @@
                 </h2>
             </div>
             <a href="{{ url('/artikel') }}"
-                class="inline-flex items-center gap-2 font-sans font-medium text-primary hover:gap-3 transition-all duration-300 shrink-0">
+                class="inline-flex items-center gap-2 font-sans font-medium text-brand hover:gap-3 transition-all duration-300 shrink-0">
                 Lihat Semua Artikel
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd"
@@ -64,11 +64,11 @@
                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             loading="lazy">
                     </div>
-                    <span class="text-secondary font-sans text-xs tracking-[0.2em] uppercase">
+                    <span class="text-brand font-sans text-xs tracking-[0.2em] uppercase">
                         {{ $article['category'] }}
                     </span>
                     <h3
-                        class="font-serif text-lg md:text-xl font-semibold leading-snug mt-2 mb-2 group-hover:text-primary transition-colors">
+                        class="font-serif text-lg md:text-xl font-semibold leading-snug mt-2 mb-2 group-hover:text-brand transition-colors">
                         {{ $article['title'] }}
                     </h3>
                     <p class="text-base-content/60 font-sans text-sm leading-relaxed">

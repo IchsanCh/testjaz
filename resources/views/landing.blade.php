@@ -8,26 +8,30 @@
         :class="scrolled ? 'bg-base-100/95 backdrop-blur-sm border-b border-base-300 py-4' : 'bg-transparent py-6'"
         class="fixed top-0 left-0 right-0 z-40 px-6 md:px-16 transition-all duration-300">
         <div class="flex items-center justify-between">
-            <span :class="scrolled ? 'text-base-content' : 'text-white'"
-                class="font-serif text-xl md:text-2xl font-semibold transition-colors duration-300">AL HIJAZ</span>
+            <a href="{{ url('/') }}" class="flex items-center gap-2.5" aria-label="AL HIJAZ — Beranda">
+                <x-logo-mark class="w-8 h-8 md:w-9 md:h-9 shrink-0" />
+                <span :class="scrolled ? 'text-base-content' : 'text-white'"
+                    class="font-serif text-xl md:text-2xl font-semibold transition-colors duration-300">AL
+                    HIJAZ</span>
+            </a>
 
             {{-- Desktop nav --}}
             <div class="hidden md:flex items-center gap-8">
                 <a href="#tentang"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                     class="text-sm font-sans transition-colors duration-300">Tentang</a>
                 <a href="#katalog"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                     class="text-sm font-sans transition-colors duration-300">Produk</a>
                 <a href="#artikel"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                     class="text-sm font-sans transition-colors duration-300">Artikel</a>
                 <a href="#kontak"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                     class="text-sm font-sans transition-colors duration-300">Kontak</a>
 
                 <button type="button" onclick="toggleTheme()"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                     class="transition-colors duration-300" aria-label="Ganti tema terang/gelap">
                     <svg x-show="!isDark" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20"
                         fill="currentColor">

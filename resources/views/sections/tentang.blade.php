@@ -16,8 +16,8 @@
         {{-- Teks --}}
         <div class="order-1 md:order-2 reveal reveal-delay-1">
             <div class="flex items-center gap-3 mb-6">
-                <span class="h-px w-10 bg-primary"></span>
-                <span class="text-primary font-sans text-xs md:text-sm tracking-[0.3em] uppercase">
+                <span class="h-px w-10 bg-brand"></span>
+                <span class="text-brand font-sans text-xs md:text-sm tracking-[0.3em] uppercase">
                     Filosofi Kami
                 </span>
             </div>

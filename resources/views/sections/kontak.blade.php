@@ -9,8 +9,8 @@
         {{-- Teks + info kontak --}}
         <div class="reveal">
             <div class="flex items-center gap-3 mb-6">
-                <span class="h-px w-10 bg-primary"></span>
-                <span class="text-primary font-sans text-xs md:text-sm tracking-[0.3em] uppercase">
+                <span class="h-px w-10 bg-brand"></span>
+                <span class="text-brand font-sans text-xs md:text-sm tracking-[0.3em] uppercase">
                     Kontak
                 </span>
             </div>
@@ -25,7 +25,7 @@
 
             <div class="space-y-4 font-sans text-sm md:text-base">
                 <a href="https://wa.me/6281234567890" target="_blank" rel="noopener"
-                    class="flex items-center gap-3 text-base-content/80 hover:text-primary transition-colors">
+                    class="flex items-center gap-3 text-base-content/80 hover:text-brand transition-colors">
                     <span class="text-base-content/40">WhatsApp</span>
                     <span>+62 812-3456-7890</span>
                 </a>
@@ -48,7 +48,7 @@
             <div>
                 <label for="name" class="block font-sans text-sm text-base-content/60 mb-2">Nama</label>
                 <input type="text" name="name" id="name" required
-                    class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-primary transition-colors"
+                    class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors"
                     placeholder="Nama lengkap">
             </div>
 
@@ -56,14 +56,14 @@
                 <label for="whatsapp_number" class="block font-sans text-sm text-base-content/60 mb-2">Nomor
                     WhatsApp</label>
                 <input type="text" name="whatsapp_number" id="whatsapp_number" required
-                    class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-primary transition-colors"
+                    class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors"
                     placeholder="08xx-xxxx-xxxx">
             </div>
 
             <div>
                 <label for="message" class="block font-sans text-sm text-base-content/60 mb-2">Pesan</label>
                 <textarea name="message" id="message" rows="4" required
-                    class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-primary transition-colors resize-none"
+                    class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors resize-none"
                     placeholder="Tulis pertanyaan atau pesan Anda"></textarea>
             </div>
 
