@@ -8,7 +8,7 @@
     <div class="max-w-4xl mx-auto px-6 text-center reveal">
         <h2 class="font-serif text-3xl md:text-5xl font-semibold leading-tight mb-8">
             <span class="reveal-line"><span>Siap Punya Sarung</span></span>
-            <span class="reveal-line"><span class="text-brand italic font-normal">Sendiri?</span></span>
+            <span class="reveal-line"><span class="text-brand text-primary italic font-normal">Sendiri?</span></span>
         </h2>
         <a href="https://wa.me/6281234567890" target="_blank" rel="noopener"
             class="group inline-flex items-center gap-2 bg-primary text-primary-content px-10 py-5 rounded-full font-sans font-semibold tracking-wide transition-all duration-300 hover:gap-3 hover:brightness-110">
@@ -34,13 +34,17 @@
                 <span class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Motif
                     Otentik</span>
                 <span class="font-sans text-secondary-content/50 text-xl">&middot;</span>
-                <span class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Songket</span>
+                <span
+                    class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Songket</span>
                 <span class="font-sans text-secondary-content/50 text-xl">&middot;</span>
-                <span class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Dobby</span>
+                <span
+                    class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Dobby</span>
                 <span class="font-sans text-secondary-content/50 text-xl">&middot;</span>
-                <span class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Super</span>
+                <span
+                    class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Super</span>
                 <span class="font-sans text-secondary-content/50 text-xl">&middot;</span>
-                <span class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Parang</span>
+                <span
+                    class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Parang</span>
                 <span class="font-sans text-secondary-content/50 text-xl">&middot;</span>
                 <span class="font-serif italic text-secondary-content text-xl md:text-2xl whitespace-nowrap">Sejak Turun
                     Temurun</span>
@@ -68,8 +72,9 @@
                 <a href="https://wa.me/6281234567890" target="_blank" rel="noopener"
                     class="group inline-flex items-center gap-2 text-secondary font-sans text-sm font-medium hover:gap-3 transition-all duration-300">
                     Chat via WhatsApp
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:translate-x-1"
-                        viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20"
+                        fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
                             clip-rule="evenodd" />
@@ -94,7 +99,8 @@
                 <ul class="space-y-3 font-sans text-sm">
                     <li><a href="https://wa.me/6281234567890" target="_blank" rel="noopener"
                             class="hover:text-secondary transition-colors">+62 812-3456-7890</a></li>
-                    <li><a href="mailto:info@alhijaz.test" class="hover:text-secondary transition-colors">info@alhijaz.test</a>
+                    <li><a href="mailto:info@alhijaz.test"
+                            class="hover:text-secondary transition-colors">info@alhijaz.test</a>
                     </li>
                     <li>Pekalongan, Jawa Tengah</li>
                 </ul>

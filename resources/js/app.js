@@ -41,14 +41,20 @@ if (hasFinePointer && !prefersReducedMotion) {
     }
 }
 
-// --- Entrance effect: overlay wordmark fade-out pas awal load ---
+// --- Entrance effect: benang ditenun (loom) + sekoci lewat, lalu menyatu ke wordmark + slogan, fade-out ---
 if (!prefersReducedMotion) {
     const entrance = document.getElementById("entrance");
     if (entrance) {
-        requestAnimationFrame(() => entrance.classList.add("entrance--ready"));
-        window.addEventListener("load", () => {
-            setTimeout(() => entrance.classList.add("entrance--done"), 600);
-        });
+        // Nunggu shuttle lewat + ripple warna kelar (~1325ms), loom menyusut bareng wordmark muncul
+        setTimeout(() => {
+            entrance.classList.add("entrance--collapsing");
+            entrance.classList.add("entrance--title-visible");
+        }, 1350);
+        setTimeout(
+            () => entrance.classList.add("entrance--slogan-visible"),
+            1800
+        );
+        setTimeout(() => entrance.classList.add("entrance--done"), 2700);
     }
 } else {
     document.getElementById("entrance")?.remove();
@@ -98,9 +104,9 @@ if (hasFinePointer && !prefersReducedMotion) {
             const rect = card.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width - 0.5;
             const y = (e.clientY - rect.top) / rect.height - 0.5;
-            card.style.setProperty("--tilt-x", `${y * -8}deg`);
-            card.style.setProperty("--tilt-y", `${x * 8}deg`);
-            card.style.setProperty("--tilt-scale", "1.02");
+            card.style.setProperty("--tilt-x", `${y * -14}deg`);
+            card.style.setProperty("--tilt-y", `${x * 14}deg`);
+            card.style.setProperty("--tilt-scale", "1.04");
         });
         card.addEventListener("mouseleave", () => {
             card.style.setProperty("--tilt-x", "0deg");

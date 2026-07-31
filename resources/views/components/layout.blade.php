@@ -31,6 +31,8 @@
 
     @if ($settings->logo)
         <link rel="icon" href="{{ asset('storage/' . $settings->logo) }}">
+    @else
+        <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     @endif
 
     {{-- Preload font kritis yang kepake di hero, biar gak nunggu request lain dulu --}}
@@ -58,7 +60,14 @@
 
     {{-- Entrance overlay --}}
     <div id="entrance" class="entrance" aria-hidden="true">
-        <span>AL HIJAZ</span>
+        <div class="entrance__loom">
+            @for ($i = 0; $i < 6; $i++)
+                <span class="entrance__warp" style="--i: {{ $i }}"></span>
+            @endfor
+            <span class="entrance__shuttle"></span>
+        </div>
+        <span class="entrance__title">AL HIJAZ</span>
+        <span class="entrance__slogan">Sarung Tenun Premium</span>
     </div>
 
     <div id="cursor-ring" class="cursor-ring" aria-hidden="true">

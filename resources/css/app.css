@@ -36,27 +36,6 @@
 @theme {
     --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
     --font-serif: "Fraunces", serif;
-    --color-brand: var(--brand-accent);
-}
-
-/*
-  --brand-accent: dipakai buat teks/aksen (kicker label, garis divider, link hover) yang
-  duduk LANGSUNG di atas bg-base-100/200/300 — beda kebutuhan sama --color-primary yang
-  dipakai buat background tombol (dipasangin sama primary-content).
-
-  Bug lama: kicker/divider/link-hover pakai text-primary & bg-primary. Di tema terang itu
-  aman (maroon gelap di atas krem = kontras tinggi), tapi di tema gelap primary jadi maroon
-  gelap juga (#8a2a2f) — dipasang di atas base-100/200/300 yang notabene nyaris hitam,
-  kontrasnya cuma ~2:1 (di bawah standar WCAG AA 4.5:1), jadi kebaca nyaris invisible.
-  --brand-accent di tema gelap sengaja dibikin lebih terang (rose #d6717a, ~5.5-6:1 kontras
-  ke semua base-*) khusus buat peran "teks aksen", tanpa ganggu warna tombol bg-primary yang
-  memang udah kontras bagus sama primary-content di kedua tema.
-*/
-[data-theme="alhijaz-light"] {
-    --brand-accent: #6b1e23;
-}
-[data-theme="alhijaz-dark"] {
-    --brand-accent: #d6717a;
 }
 
 /* fraunces-regular - latin */
@@ -124,7 +103,8 @@ header {
     color: #e7dcc8;
 }
 
-/* Custom cursor — ring outline, auto-kontras di background apapun via mix-blend-mode */
+/* Custom cursor — ring dual-tone (border terang + shadow gelap tipis), aman di background apapun
+   tanpa mix-blend-mode (itu penyebab bug "nutupin" konten pas ketemu blok warna solid) */
 .cursor-ring {
     position: fixed;
     top: 0;
@@ -135,10 +115,10 @@ header {
     margin-top: -16px;
     border-radius: 9999px;
     border: 1.5px solid white;
+    box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.4);
     opacity: 0;
     pointer-events: none;
     z-index: 9999;
-    mix-blend-mode: difference;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -150,11 +130,14 @@ header {
     opacity: 1;
 }
 .cursor-ring--hover {
-    width: 56px;
-    height: 56px;
-    margin-left: -28px;
-    margin-top: -28px;
+    width: 64px;
+    height: 64px;
+    margin-left: -32px;
+    margin-top: -32px;
     background-color: white;
+    border-color: white;
+    box-shadow: 0 0 24px 4px rgba(184, 134, 59, 0.5),
+        0 0 0 1.5px rgba(0, 0, 0, 0.3);
 }
 .cursor-ring__label {
     font-family: "Inter", sans-serif;
@@ -260,33 +243,125 @@ header {
 .tilt-card {
     transform: perspective(1000px) rotateX(var(--tilt-x, 0deg))
         rotateY(var(--tilt-y, 0deg)) scale(var(--tilt-scale, 1));
-    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 400ms ease;
     will-change: transform;
 }
+.tilt-card:hover {
+    box-shadow: 0 8px 24px -8px rgba(107, 30, 35, 0.35),
+        0 0 16px -2px rgba(184, 134, 59, 0.4);
+}
+[data-theme="alhijaz-dark"] .tilt-card:hover {
+    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.5),
+        0 0 16px -2px rgba(201, 152, 90, 0.4);
+}
 
-/* Entrance overlay — nutup layar sebentar pas awal load, terus fade+scale out */
+/* Entrance overlay — animasi "benang ditenun" (loom), lebih match tema tenun */
 .entrance {
     position: fixed;
     inset: 0;
     z-index: 99999;
     background-color: #1c1614;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 1.75rem;
     transition: opacity 700ms cubic-bezier(0.65, 0, 0.35, 1), visibility 700ms;
 }
-.entrance span {
+
+/* Benang lungsin (vertikal) — tumbuh dari atas, tekstur gradient, gantian warna emas/maroon */
+.entrance__loom {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 7px;
+    width: 140px;
+    height: 56px;
+    transition: opacity 500ms ease, transform 500ms ease;
+}
+.entrance--collapsing .entrance__loom {
+    opacity: 0;
+    transform: scale(0.8);
+}
+.entrance__warp {
+    width: 3px;
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #e2b36e, #c9985a);
+    transform-origin: top;
+    transform: scaleY(0);
+    animation: warp-grow 450ms cubic-bezier(0.16, 1, 0.3, 1) forwards,
+        warp-ripple 350ms ease forwards;
+    animation-delay: calc(var(--i) * 70ms), calc(750ms + var(--i) * 45ms);
+}
+.entrance__warp:nth-child(even) {
+    background: linear-gradient(180deg, #a8353b, #8a2a2f);
+}
+
+/* Sekoci (shuttle) — nyapu ngelewatin benang lungsin, ganti dari garis polos */
+.entrance__shuttle {
+    position: absolute;
+    top: 50%;
+    left: -24px;
+    width: 24px;
+    height: 9px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #e7dcc8, #c9985a);
+    box-shadow: 0 0 12px rgba(201, 152, 90, 0.6);
+    transform: translateY(-50%) translateX(0);
+    animation: shuttle-pass 600ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation-delay: 600ms;
+}
+
+@keyframes warp-grow {
+    to {
+        transform: scaleY(1);
+    }
+}
+@keyframes warp-ripple {
+    0% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.6);
+    }
+    100% {
+        filter: brightness(1);
+    }
+}
+@keyframes shuttle-pass {
+    to {
+        transform: translateY(-50%) translateX(188px);
+    }
+}
+
+.entrance__title {
     font-family: "Fraunces", serif;
     color: #e7dcc8;
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
     letter-spacing: 0.15em;
     opacity: 0;
-    transform: scale(0.96);
-    transition: opacity 500ms ease 150ms, transform 500ms ease 150ms;
+    transform: translateY(8px) scale(0.94);
+    transition: opacity 600ms ease,
+        transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.entrance--ready span {
+.entrance__slogan {
+    font-family: "Inter", sans-serif;
+    color: #c9985a;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 500ms ease;
+}
+.entrance--title-visible .entrance__title {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0) scale(1);
+}
+.entrance--slogan-visible .entrance__slogan {
+    opacity: 1;
 }
 .entrance--done {
     opacity: 0;
