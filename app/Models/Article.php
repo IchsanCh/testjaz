@@ -11,6 +11,11 @@ use Illuminate\Support\Str;
 #[Fillable(['article_category_id', 'title', 'slug', 'cover_image', 'content', 'status'])]
 class Article extends Model
 {
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(ArticleCategory::class, 'article_category_id');

@@ -1,4 +1,25 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Alpine x-cloak — sembunyiin elemen sampe Alpine kelar inisialisasi, biar gak
+   sempet flash keliatan sekejap pas awal load (dipake di halaman artikel). */
+[x-cloak] {
+    display: none !important;
+}
+
+/* Highlight kata kunci pencarian di card artikel — beda warna & bentuk dari
+   teks sekitarnya biar jelas kebaca ini yang match. */
+.search-highlight {
+    background-color: color-mix(
+        in srgb,
+        var(--color-secondary) 45%,
+        transparent
+    );
+    color: var(--color-base-content);
+    border-radius: 3px;
+    padding: 0 2px;
+    font-weight: 600;
+}
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,7 +27,6 @@
 @plugin "daisyui" {
     themes: alhijaz-light --default, alhijaz-dark --prefersdark;
 }
-@plugin "@tailwindcss/typography";
 
 @plugin "daisyui/theme" {
     name: "alhijaz-light";
@@ -441,4 +461,109 @@ header {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+}
+
+/* Kustomisasi @tailwindcss/typography biar ngikutin brand (Fraunces buat heading,
+   warna maroon/gold), bukan default abu-abu Tailwind. Cukup tempel bareng "prose". */
+.prose-hijaz {
+    --tw-prose-body: var(--color-base-content);
+    --tw-prose-headings: var(--color-base-content);
+    --tw-prose-links: var(--color-brand);
+    --tw-prose-bold: var(--color-base-content);
+    --tw-prose-quotes: var(--color-base-content);
+    --tw-prose-quote-borders: var(--color-secondary);
+    --tw-prose-hr: var(--color-base-300);
+    --tw-prose-bullets: var(--color-secondary);
+    --tw-prose-counters: var(--color-secondary);
+    --tw-prose-captions: color-mix(
+        in srgb,
+        var(--color-base-content) 60%,
+        transparent
+    );
+}
+.prose-hijaz :where(h1, h2, h3, h4):not(:where([class~="not-prose"] *)) {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+}
+.prose-hijaz :where(a):not(:where([class~="not-prose"] *)) {
+    text-decoration-color: color-mix(
+        in srgb,
+        var(--color-brand) 40%,
+        transparent
+    );
+    text-underline-offset: 3px;
+}
+.prose-hijaz :where(blockquote):not(:where([class~="not-prose"] *)) {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+}
+
+/* Loading indicator loom kecil — dipake pas search/filter artikel lagi fetch,
+   motif sama kayak entrance (benang lungsin + sekoci) tapi versi mini & looping
+   terus (bukan sekali jalan kayak punya entrance). */
+.loom-spinner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 64px;
+    height: 26px;
+}
+.loom-spinner__warp {
+    width: 2.5px;
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #e2b36e, #c9985a);
+    animation: loom-spinner-pulse 1100ms ease-in-out infinite;
+    animation-delay: calc(var(--i) * 90ms);
+}
+.loom-spinner__warp:nth-child(even) {
+    background: linear-gradient(180deg, #a8353b, #8a2a2f);
+}
+.loom-spinner__shuttle {
+    position: absolute;
+    top: 50%;
+    left: -12px;
+    width: 12px;
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #e7dcc8, #c9985a);
+    box-shadow: 0 0 8px rgba(201, 152, 90, 0.6);
+    transform: translateY(-50%);
+    animation: loom-spinner-shuttle 1400ms cubic-bezier(0.65, 0, 0.35, 1)
+        infinite;
+}
+@keyframes loom-spinner-pulse {
+    0%,
+    100% {
+        transform: scaleY(0.35);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+@keyframes loom-spinner-shuttle {
+    0% {
+        transform: translateY(-50%) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50%) translateX(84px);
+        opacity: 0;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .loom-spinner__warp,
+    .loom-spinner__shuttle {
+        animation: none;
+    }
 }

@@ -24,7 +24,9 @@ class ArticleForm
                 TextInput::make('title')
                     ->label('Judul')
                     ->live(debounce: 500)
-                    ->afterStateUpdated(fn (string $state, callable $set) => $set('slug', Str::slug($state)))
+                    ->afterStateUpdated(function (?string $state, callable $set) {
+                        $set('slug', Str::slug($state ?? ''));
+                    })
                     ->required(),
                 TextInput::make('slug')
                     ->label('Slug (URL)')
@@ -45,9 +47,9 @@ class ArticleForm
                 Select::make('status')
                     ->label('Status')
                     ->options([
-                        'draft' => 'Draft',
-                        'published' => 'Published',
-                    ])
+                                            'draft' => 'Draft',
+                                            'published' => 'Published',
+                                        ])
                     ->default('draft')
                     ->required(),
             ]);

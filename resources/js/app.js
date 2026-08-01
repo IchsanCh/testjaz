@@ -117,59 +117,156 @@ window.toggleTheme = function () {
 
 // --- Scroll-reveal: elemen dengan class "reveal" atau "reveal-line" fade/slide
 // tiap masuk viewport, dan balik ke state semula tiap keluar viewport — jadi
-// animasinya ngulang baik pas scroll turun maupun scroll naik, gak cuma sekali. ---
-if (!prefersReducedMotion) {
-    const revealObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                entry.target.classList.toggle(
-                    "reveal--visible",
-                    entry.isIntersecting
-                );
+// animasinya ngulang baik pas scroll turun maupun scroll naik, gak cuma sekali.
+//
+// Dibungkus jadi fungsi (bukan langsung jalan sekali) karena konten yang di-load
+// belakangan lewat AJAX (misal hasil search artikel) butuh di-"observe" ulang —
+// elemen baru itu gak otomatis ke-pickup sama observer yang udah jalan duluan. ---
+const revealObserver = !prefersReducedMotion
+    ? new IntersectionObserver(
+          (entries) => {
+              entries.forEach((entry) => {
+                  entry.target.classList.toggle(
+                      "reveal--visible",
+                      entry.isIntersecting
+                  );
+              });
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+      )
+    : null;
+
+function initReveals(root = document) {
+    if (revealObserver) {
+        root.querySelectorAll(".reveal, .reveal-line, .reveal-image").forEach(
+            (el) => revealObserver.observe(el)
+        );
+    } else {
+        root.querySelectorAll(".reveal, .reveal-line, .reveal-image").forEach(
+            (el) => el.classList.add("reveal--visible")
+        );
+    }
+}
+
+// --- Tilt card: efek miring halus ngikutin posisi kursor, cuma di device mouse.
+// Sama kayak reveal di atas, dibungkus fungsi biar bisa dipanggil ulang buat
+// card yang baru masuk lewat AJAX. data-tilt-bound dipasang biar card yang sama
+// gak ke-bind listener dua kali kalau initTiltCards() kepanggil lebih dari sekali. ---
+function initTiltCards(root = document) {
+    if (!hasFinePointer || prefersReducedMotion) return;
+
+    root.querySelectorAll(".tilt-card:not([data-tilt-bound])").forEach(
+        (card) => {
+            card.dataset.tiltBound = "true";
+            let queued = false;
+            let lastEvent = null;
+
+            function applyTilt() {
+                queued = false;
+                const rect = card.getBoundingClientRect();
+                const x = (lastEvent.clientX - rect.left) / rect.width - 0.5;
+                const y = (lastEvent.clientY - rect.top) / rect.height - 0.5;
+                card.style.setProperty("--tilt-x", `${y * -14}deg`);
+                card.style.setProperty("--tilt-y", `${x * 14}deg`);
+                card.style.setProperty("--tilt-scale", "1.04");
+            }
+
+            card.addEventListener(
+                "mousemove",
+                (e) => {
+                    lastEvent = e;
+                    if (queued) return;
+                    queued = true;
+                    requestAnimationFrame(applyTilt);
+                },
+                { passive: true }
+            );
+            card.addEventListener("mouseleave", () => {
+                card.style.setProperty("--tilt-x", "0deg");
+                card.style.setProperty("--tilt-y", "0deg");
+                card.style.setProperty("--tilt-scale", "1");
+            });
+        }
+    );
+}
+
+initReveals();
+initTiltCards();
+
+// Dipanggil dari Alpine setelah swap innerHTML (lihat artikelSearch() di bawah)
+window.hijazRehydrate = function (root) {
+    initReveals(root);
+    initTiltCards(root);
+};
+
+// --- Live search + filter kategori (multi-select) buat halaman /artikel.
+// Fetch ke URL yang sama (query string berubah), controller balikin partial HTML
+// kalau request-nya AJAX (lihat ArtikelController::index). URL browser tetep
+// ke-update (pushState) biar bisa di-share/di-bookmark, dan tombol back/forward
+// browser tetep jalan (popstate). ---
+window.artikelSearch = function () {
+    return {
+        q: new URLSearchParams(window.location.search).get("q") || "",
+        kategori: new URLSearchParams(window.location.search).getAll(
+            "kategori[]"
+        ),
+        loading: false,
+        debounceTimer: null,
+
+        init() {
+            window.addEventListener("popstate", () => {
+                const params = new URLSearchParams(window.location.search);
+                this.q = params.get("q") || "";
+                this.kategori = params.getAll("kategori[]");
+                this.fetchResults(false);
             });
         },
-        { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
-    );
 
-    document
-        .querySelectorAll(".reveal, .reveal-line, .reveal-image")
-        .forEach((el) => revealObserver.observe(el));
-} else {
-    document
-        .querySelectorAll(".reveal, .reveal-line, .reveal-image")
-        .forEach((el) => el.classList.add("reveal--visible"));
-}
+        onKeywordInput() {
+            clearTimeout(this.debounceTimer);
+            this.debounceTimer = setTimeout(() => this.fetchResults(), 400);
+        },
 
-// --- Tilt card: efek miring halus ngikutin posisi kursor, cuma di device mouse ---
-if (hasFinePointer && !prefersReducedMotion) {
-    document.querySelectorAll(".tilt-card").forEach((card) => {
-        let queued = false;
-        let lastEvent = null;
+        toggleKategori(slug) {
+            const idx = this.kategori.indexOf(slug);
+            if (idx === -1) this.kategori.push(slug);
+            else this.kategori.splice(idx, 1);
+            this.fetchResults();
+        },
 
-        function applyTilt() {
-            queued = false;
-            const rect = card.getBoundingClientRect();
-            const x = (lastEvent.clientX - rect.left) / rect.width - 0.5;
-            const y = (lastEvent.clientY - rect.top) / rect.height - 0.5;
-            card.style.setProperty("--tilt-x", `${y * -14}deg`);
-            card.style.setProperty("--tilt-y", `${x * 14}deg`);
-            card.style.setProperty("--tilt-scale", "1.04");
-        }
+        buildUrl() {
+            const params = new URLSearchParams();
+            if (this.q) params.set("q", this.q);
+            this.kategori.forEach((slug) => params.append("kategori[]", slug));
+            const qs = params.toString();
+            return qs
+                ? `${window.location.pathname}?${qs}`
+                : window.location.pathname;
+        },
 
-        card.addEventListener(
-            "mousemove",
-            (e) => {
-                lastEvent = e;
-                if (queued) return;
-                queued = true;
-                requestAnimationFrame(applyTilt);
-            },
-            { passive: true }
-        );
-        card.addEventListener("mouseleave", () => {
-            card.style.setProperty("--tilt-x", "0deg");
-            card.style.setProperty("--tilt-y", "0deg");
-            card.style.setProperty("--tilt-scale", "1");
-        });
-    });
-}
+        async fetchResults(pushState = true, explicitUrl = null) {
+            this.loading = true;
+            const url = explicitUrl || this.buildUrl();
+            try {
+                const res = await fetch(url, {
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const html = await res.text();
+                const grid = document.getElementById("artikel-grid");
+                grid.innerHTML = html;
+                window.hijazRehydrate(grid);
+                // Cuma scroll ke grid kalau ini dari klik pagination (explicitUrl ada) —
+                // scroll otomatis tiap keystroke pencarian bakal ganggu user yang lagi ngetik.
+                if (explicitUrl) {
+                    grid.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+                if (pushState) window.history.pushState({}, "", url);
+            } catch (e) {
+                console.error("Gagal muat artikel:", e);
+            } finally {
+                this.loading = false;
+            }
+        },
+    };
+};

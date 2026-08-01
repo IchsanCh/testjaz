@@ -15,7 +15,9 @@ class ArticleCategoryForm
                 TextInput::make('name')
                     ->label('Nama Kategori')
                     ->live(debounce: 500)
-                    ->afterStateUpdated(fn (string $state, callable $set) => $set('slug', Str::slug($state)))
+                    ->afterStateUpdated(function (?string $state, callable $set) {
+                        $set('slug', Str::slug($state ?? ''));
+                    })
                     ->required(),
                 TextInput::make('slug')
                     ->label('Slug (URL)')
