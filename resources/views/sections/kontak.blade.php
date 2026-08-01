@@ -53,11 +53,10 @@
             </div>
 
             <div>
-                <label for="whatsapp_number" class="block font-sans text-sm text-base-content/60 mb-2">Nomor
-                    WhatsApp</label>
-                <input type="text" name="whatsapp_number" id="whatsapp_number" required
+                <label for="email" class="block font-sans text-sm text-base-content/60 mb-2">Email</label>
+                <input type="email" name="email" id="email" required
                     class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors"
-                    placeholder="08xx-xxxx-xxxx">
+                    placeholder="nama@email.com">
             </div>
 
             <div>

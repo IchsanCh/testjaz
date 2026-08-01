@@ -24,9 +24,6 @@ class ContactSubmissionsTable
                 TextColumn::make('name')
                     ->label('Nama')
                     ->searchable(),
-                TextColumn::make('whatsapp_number')
-                    ->label('Nomor WhatsApp')
-                    ->searchable(),
                 TextColumn::make('email')
                     ->label('Email')
                     ->searchable(),
@@ -48,18 +45,11 @@ class ContactSubmissionsTable
             ->recordActions([
                 ViewAction::make()
                     ->label('Lihat'),
-                Action::make('reply')
-                    ->label('Balas via WhatsApp')
-                    ->icon('heroicon-o-chat-bubble-left-right')
-                    ->color('success')
-                    ->url(fn ($record) => $record->whatsapp_url)
-                    ->openUrlInNewTab(),
                 Action::make('replyEmail')
                     ->label('Balas via Email')
                     ->icon('heroicon-o-envelope')
                     ->color('info')
                     ->url(fn ($record) => $record->email_url)
-                    ->visible(fn ($record) => filled($record->email))
                     ->openUrlInNewTab(),
                 Action::make('toggleRead')
                     ->label(fn ($record) => $record->is_read ? 'Tandai Belum Dibaca' : 'Tandai Sudah Dibaca')

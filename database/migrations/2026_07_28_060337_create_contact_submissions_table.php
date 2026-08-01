@@ -10,8 +10,7 @@ return new class () extends Migration {
         Schema::create('contact_submissions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('whatsapp_number');
-            $table->string('email')->nullable();
+            $table->string('email');
             $table->text('message');
             $table->boolean('is_read')->default(false);
             $table->timestamps();

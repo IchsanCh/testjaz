@@ -23,8 +23,8 @@ class LatestContactSubmissionsWidget extends BaseWidget
             ->columns([
                 TextColumn::make('name')
                     ->label('Nama'),
-                TextColumn::make('whatsapp_number')
-                    ->label('Nomor WhatsApp'),
+                TextColumn::make('email')
+                    ->label('Email'),
                 TextColumn::make('message')
                     ->label('Pesan')
                     ->limit(60),
@@ -33,18 +33,11 @@ class LatestContactSubmissionsWidget extends BaseWidget
                     ->since(),
             ])
             ->recordActions([
-                Action::make('reply')
-                    ->label('Balas via WhatsApp')
-                    ->icon('heroicon-o-chat-bubble-left-right')
-                    ->color('success')
-                    ->url(fn (ContactSubmission $record) => $record->whatsapp_url)
-                    ->openUrlInNewTab(),
                 Action::make('replyEmail')
                     ->label('Balas via Email')
                     ->icon('heroicon-o-envelope')
                     ->color('info')
                     ->url(fn (ContactSubmission $record) => $record->email_url)
-                    ->visible(fn (ContactSubmission $record) => filled($record->email))
                     ->openUrlInNewTab(),
                 Action::make('tandaiDibaca')
                     ->label('Tandai Dibaca')
