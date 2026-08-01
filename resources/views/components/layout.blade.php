@@ -70,8 +70,9 @@
         <span class="entrance__slogan">Sarung Tenun Premium</span>
     </div>
 
-    <div id="cursor-ring" class="cursor-ring" aria-hidden="true">
-        <span class="cursor-ring__label" id="cursor-ring-label"></span>
+    <div id="cursor-ring" class="cursor-ring" aria-hidden="true"></div>
+    <div id="cursor-tooltip" class="cursor-tooltip" aria-hidden="true">
+        <span id="cursor-tooltip-label"></span>
     </div>
 
     {{-- Shortcut ketik "admin" buat lompat ke panel — sengaja gak ada tombol login tampil di publik --}}

@@ -8,7 +8,7 @@
     <div class="max-w-4xl mx-auto px-6 text-center reveal">
         <h2 class="font-serif text-3xl md:text-5xl font-semibold leading-tight mb-8">
             <span class="reveal-line"><span>Siap Punya Sarung</span></span>
-            <span class="reveal-line"><span class="text-brand text-primary italic font-normal">Sendiri?</span></span>
+            <span class="reveal-line"><span class="text-brand italic font-normal">Sendiri?</span></span>
         </h2>
         <a href="https://wa.me/6281234567890" target="_blank" rel="noopener"
             class="group inline-flex items-center gap-2 bg-primary text-primary-content px-10 py-5 rounded-full font-sans font-semibold tracking-wide transition-all duration-300 hover:gap-3 hover:brightness-110">

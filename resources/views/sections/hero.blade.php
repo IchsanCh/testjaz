@@ -32,7 +32,7 @@
                 berpengalaman — untuk sarung yang menemani setiap langkah dan setiap ibadah.
             </p>
 
-            <div class="flex flex-wrap items-center gap-4">
+            <div class="flex flex-wrap items-center gap-4 mb-4">
                 <a href="#katalog"
                     class="group inline-flex items-center gap-2 bg-secondary text-neutral-900 px-8 py-4 rounded-full font-sans font-semibold text-sm md:text-base tracking-wide transition-all duration-300 hover:gap-3 hover:brightness-110">
                     Lihat Koleksi

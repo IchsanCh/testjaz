@@ -47,9 +47,9 @@
 
             @foreach ($steps as $i => $step)
                 <div class="group reveal reveal-delay-{{ $i + 1 }}">
-                    <div class="relative overflow-hidden rounded-2xl mb-6 aspect-[4/5]">
+                    <div class="relative overflow-hidden rounded-2xl mb-6 aspect-[4/5] reveal-image">
                         <img src="{{ asset('images/' . $step['image']) }}" alt="{{ $step['title'] }}"
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            class="parallax-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             loading="lazy">
                         <span class="absolute top-4 left-4 font-serif text-white/90 text-4xl font-semibold drop-shadow">
                             {{ $step['number'] }}

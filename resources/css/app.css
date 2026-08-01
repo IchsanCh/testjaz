@@ -6,6 +6,7 @@
 @plugin "daisyui" {
     themes: alhijaz-light --default, alhijaz-dark --prefersdark;
 }
+@plugin "@tailwindcss/typography";
 
 @plugin "daisyui/theme" {
     name: "alhijaz-light";
@@ -130,30 +131,52 @@ header {
     opacity: 1;
 }
 .cursor-ring--hover {
-    width: 64px;
-    height: 64px;
-    margin-left: -32px;
-    margin-top: -32px;
-    background-color: white;
-    border-color: white;
+    width: 56px;
+    height: 56px;
+    margin-left: -28px;
+    margin-top: -28px;
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 24px 4px rgba(184, 134, 59, 0.5),
         0 0 0 1.5px rgba(0, 0, 0, 0.3);
 }
-.cursor-ring__label {
+@media (pointer: coarse) {
+    .cursor-ring {
+        display: none;
+    }
+}
+
+/* Tooltip cursor — pill kecil ngambang di deket cursor, isinya nunggu data-cursor-text.
+   Dipisah dari .cursor-ring biar teksnya bebas panjang berapa aja, gak keseset muat di lingkaran. */
+.cursor-tooltip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    padding: 7px 14px;
+    border-radius: 9999px;
+    background-color: var(--color-base-content);
+    color: var(--color-base-100);
     font-family: "Inter", sans-serif;
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: black;
+    white-space: nowrap;
     opacity: 0;
-    transition: opacity 200ms ease;
+    scale: 0.8;
+    pointer-events: none;
+    box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.35);
+    transition: opacity 200ms ease,
+        scale 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform, opacity, scale;
 }
-.cursor-ring--hover .cursor-ring__label {
+.cursor-tooltip--visible {
     opacity: 1;
+    scale: 1;
 }
 @media (pointer: coarse) {
-    .cursor-ring {
+    .cursor-tooltip {
         display: none;
     }
 }
@@ -230,7 +253,12 @@ header {
         transform: translateX(0);
     }
     to {
-        transform: translateX(-100%);
+        /* Track isinya 2 salinan konten yang sama (lihat @for di footer.blade.php).
+           Geser -50% = persis lebar 1 salinan, jadi pas animasinya ngulang dari 0%,
+           salinan ke-2 udah pas nempatin posisi salinan ke-1 — mulus nyambung, gak
+           ada jeda kosong. -100% (sebelumnya) geser DUA salinan sekaligus, jadi
+           space konten abis sebelum animasinya loop lagi -> kelihatan patah/kedip. */
+        transform: translateX(-50%);
     }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -239,7 +267,53 @@ header {
     }
 }
 
-/* Tilt card — transform di-drive lewat JS (custom property), transition cuma buat reset pas mouseleave */
+/* Reveal gambar — zoom+blur halus pas masuk viewport, dipasang di WRAPPER
+   (bukan di <img> langsung) biar gak rebutan property sama hover-zoom yang
+   udah ada di <img> (group-hover:scale-105). scale/filter di sini sama sekali
+   gak nyentuh punya <img>. Bidirectional juga — reveal--visible-nya di-toggle
+   sama observer yang sama kayak .reveal biasa.
+
+   Sengaja GAK pakai clip-path buat efek wipe: elemen yang dianimasiin dari
+   clip-path area 0% (kepotong abis) rawan gagal repaint pas balik keliatan di
+   sebagian browser/GPU — itu penyebab gambar sempet invisible permanen
+   kemarin. scale+filter aman karena di titik manapun transisinya, elemennya
+   selalu punya area yang beneran ke-render (gak pernah collapse ke nol). */
+.reveal-image {
+    scale: 1.08;
+    filter: blur(4px);
+    transition: scale 900ms cubic-bezier(0.16, 1, 0.3, 1),
+        filter 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-image.reveal--visible {
+    scale: 1;
+    filter: blur(0);
+}
+
+/* Parallax scroll-linked — gambar drift halus ngikutin posisi scroll beneran
+   (bukan trigger sekali kayak .reveal), pakai CSS scroll-driven animation asli
+   jadi jalan di GPU tanpa JS sama sekali. Browser yang belum dukung (Safari lama,
+   Firefox lama) otomatis ke-skip lewat @supports, gambar tetap normal diem. */
+@supports (animation-timeline: view()) {
+    .parallax-img {
+        animation: parallax-drift linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 60%;
+    }
+    @keyframes parallax-drift {
+        from {
+            translate: 0 -3%;
+        }
+
+        to {
+            translate: 0 3%;
+        }
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .parallax-img {
+        animation: none !important;
+    }
+}
 .tilt-card {
     transform: perspective(1000px) rotateX(var(--tilt-x, 0deg))
         rotateY(var(--tilt-y, 0deg)) scale(var(--tilt-scale, 1));

@@ -44,9 +44,9 @@
 
             @foreach ($items as $i => $item)
                 <div class="bg-base-100 rounded-2xl overflow-hidden reveal reveal-delay-{{ $i + 1 }}">
-                    <div class="aspect-[4/3] overflow-hidden">
+                    <div class="relative aspect-[4/3] overflow-hidden reveal-image">
                         <img src="{{ asset('images/' . $item['image']) }}" alt="{{ $item['title'] }}"
-                            class="w-full h-full object-cover" loading="lazy">
+                            class="parallax-img w-full h-full object-cover" loading="lazy">
                     </div>
                     <div class="p-6 md:p-8">
                         <h3 class="font-serif text-xl md:text-2xl font-semibold mb-3">

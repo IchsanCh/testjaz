@@ -17,21 +17,22 @@
             {{-- Desktop nav --}}
             <div class="hidden md:flex items-center gap-8">
                 <a href="#tentang"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                     class="text-sm font-sans transition-colors duration-300">Tentang</a>
                 <a href="#katalog"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                     class="text-sm font-sans transition-colors duration-300">Produk</a>
                 <a href="#artikel"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                     class="text-sm font-sans transition-colors duration-300">Artikel</a>
                 <a href="#kontak"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                     class="text-sm font-sans transition-colors duration-300">Kontak</a>
 
                 <button type="button" onclick="toggleTheme()"
-                    :class="scrolled ? 'text-base-content/70 hover:text-primary' : 'text-white/80 hover:text-white'"
-                    class="transition-colors duration-300" aria-label="Ganti tema terang/gelap">
+                    :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
+                    :data-cursor-text="isDark ? 'Mode Terang' : 'Mode Gelap'" class="transition-colors duration-300"
+                    aria-label="Ganti tema terang/gelap">
                     <svg x-show="!isDark" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20"
                         fill="currentColor">
                         <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
@@ -47,8 +48,8 @@
 
             {{-- Mobile hamburger --}}
             <button type="button" @click="mobileOpen = !mobileOpen"
-                :class="scrolled ? 'text-base-content' : 'text-white'" class="md:hidden transition-colors duration-300"
-                aria-label="Buka menu">
+                :class="scrolled ? 'text-base-content' : 'text-white'" :data-cursor-text="mobileOpen ? 'Tutup' : 'Menu'"
+                class="md:hidden transition-colors duration-300" aria-label="Buka menu">
                 <svg x-show="!mobileOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 20 20"
                     fill="currentColor">
                     <path fill-rule="evenodd"

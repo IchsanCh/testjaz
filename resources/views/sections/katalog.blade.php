@@ -45,9 +45,9 @@
             @foreach ($products as $i => $product)
                 <a href="{{ url('/produk') }}" data-cursor-text="Lihat"
                     class="group block tilt-card reveal reveal-delay-{{ ($i % 3) + 1 }}">
-                    <div class="relative overflow-hidden rounded-2xl aspect-[4/5] bg-transparent ">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[4/5] bg-transparent reveal-image">
                         <img src="{{ asset('images/' . $product['image']) }}" alt="Sarung motif {{ $product['name'] }}"
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            class="parallax-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             loading="lazy">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent">
                         </div>

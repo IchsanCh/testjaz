@@ -7,10 +7,10 @@
 
         {{-- Foto --}}
         <div class="relative order-2 md:order-1 reveal">
-            <div class="absolute -top-4 -left-4 w-full h-full border border-secondary/40 rounded-2xl hidden md:block">
+            <div class="relative overflow-hidden rounded-2xl aspect-[4/5] reveal-image">
+                <img src="{{ asset('images/building.webp') }}" alt="Pabrik AL HIJAZ di Pekalongan"
+                    class="parallax-img w-full h-full object-cover rounded-2xl" loading="lazy">
             </div>
-            <img src="{{ asset('images/building.webp') }}" alt="Pabrik AL HIJAZ di Pekalongan"
-                class="relative w-full aspect-[4/5] object-cover rounded-2xl" loading="lazy">
         </div>
 
         {{-- Teks --}}
