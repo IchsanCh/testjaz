@@ -4,6 +4,7 @@
     'ogTitle' => null,
     'ogDescription' => null,
     'ogImage' => null,
+    'showEntrance' => false,
 ])
 
 @php
@@ -58,17 +59,19 @@
 
     {{ $slot }}
 
-    {{-- Entrance overlay --}}
-    <div id="entrance" class="entrance" aria-hidden="true">
-        <div class="entrance__loom">
-            @for ($i = 0; $i < 6; $i++)
-                <span class="entrance__warp" style="--i: {{ $i }}"></span>
-            @endfor
-            <span class="entrance__shuttle"></span>
+    {{-- Entrance overlay — cuma render kalau eksplisit diaktifin (Home doang) --}}
+    @if ($showEntrance)
+        <div id="entrance" class="entrance" aria-hidden="true">
+            <div class="entrance__loom">
+                @for ($i = 0; $i < 6; $i++)
+                    <span class="entrance__warp" style="--i: {{ $i }}"></span>
+                @endfor
+                <span class="entrance__shuttle"></span>
+            </div>
+            <span class="entrance__title">AL HIJAZ</span>
+            <span class="entrance__slogan">Sarung Tenun Premium</span>
         </div>
-        <span class="entrance__title">AL HIJAZ</span>
-        <span class="entrance__slogan">Sarung Tenun Premium</span>
-    </div>
+    @endif
 
     <div id="cursor-ring" class="cursor-ring" aria-hidden="true"></div>
     <div id="cursor-tooltip" class="cursor-tooltip" aria-hidden="true">

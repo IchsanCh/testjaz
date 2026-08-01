@@ -26,6 +26,7 @@ class ProductForm
                 FileUpload::make('images')
                     ->label('Gambar')
                     ->image()
+                    ->disk('public')
                     ->maxSize(2048)
                     ->multiple()
                     ->reorderable()

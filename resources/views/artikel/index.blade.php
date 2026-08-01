@@ -1,4 +1,5 @@
-<x-layout>
+<x-layout title="Artikel & Wawasan — AL HIJAZ"
+    description="Cerita, proses, dan tips seputar sarung tenun dari AL HIJAZ — dari perawatan kain sampai perjalanan benang jadi motif.">
     <x-navbar />
 
     <main x-data="artikelSearch()" x-init="init()" x-on:paginate.window="fetchResults(true, $event.detail)">

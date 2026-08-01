@@ -70,6 +70,8 @@ class ArtikelController extends Controller
 
         $article->load('category'); // 1 query, bukan lazy-load per akses di view
 
+        // Utamain artikel dari kategori yang sama. Kalau kurang dari 3, isi sisanya
+        // pakai artikel terkini (di luar kategori itu) biar rekomendasi selalu penuh.
         $related = Article::query()
             ->published()
             ->with('category')
@@ -78,6 +80,19 @@ class ArtikelController extends Controller
             ->latest()
             ->limit(3)
             ->get();
+
+        if ($related->count() < 3) {
+            $fallback = Article::query()
+                ->published()
+                ->with('category')
+                ->where('id', '!=', $article->id)
+                ->whereNotIn('id', $related->pluck('id'))
+                ->latest()
+                ->limit(3 - $related->count())
+                ->get();
+
+            $related = $related->concat($fallback);
+        }
 
         return view('artikel.show', [
             'article' => $article,

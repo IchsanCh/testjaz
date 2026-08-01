@@ -1,3 +1,12 @@
+@if (!$articles->isEmpty())
+    <p class="col-span-full font-sans text-sm text-base-content/50 mb-2">
+        {{ $articles->total() }} artikel ditemukan
+        @if ($keyword !== '')
+            untuk "<span class="text-base-content/70">{{ $keyword }}</span>"
+        @endif
+    </p>
+@endif
+
 @if ($articles->isEmpty())
     <div class="col-span-full py-20 text-center">
         <p class="font-serif text-xl md:text-2xl mb-2">Artikel tidak ditemukan</p>

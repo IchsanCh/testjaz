@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :title="($article->meta_title ?? $article->title) . ' — AL HIJAZ'" :description="$article->meta_description" :og-title="$article->title" :og-description="$article->meta_description" :og-image="$article->cover_image">
     <x-navbar />
 
     <main>
@@ -34,6 +34,7 @@
                 </h1>
                 <p class="text-white/50 font-sans text-sm mt-6">
                     {{ $article->updated_at->locale('id')->translatedFormat('d F Y') }}
+                    &middot; AL HIJAZ
                 </p>
             </div>
         </section>
@@ -41,8 +42,23 @@
         {{-- Konten --}}
         <section class="py-16 md:py-24 bg-base-100">
             <div class="max-w-3xl mx-auto px-6 md:px-16">
+
+                {{-- Share — atas, sebelum mulai baca --}}
+                <div class="flex justify-end mb-8">
+                    <x-share-buttons :url="url()->current()" :title="$article->title" />
+                </div>
+
                 <div class="prose prose-hijaz max-w-none prose-lg">
                     {!! $article->content !!}
+                </div>
+
+                {{-- Share — bawah lagi, banyak orang share abis kelar baca --}}
+                <div
+                    class="mt-16 pt-8 border-t border-base-300/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <p class="font-serif italic text-lg text-base-content/70">
+                        Suka artikel ini? Bagikan ke yang lain.
+                    </p>
+                    <x-share-buttons :url="url()->current()" :title="$article->title" />
                 </div>
             </div>
         </section>

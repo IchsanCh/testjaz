@@ -49,6 +49,7 @@ class ManageSiteSettings extends Page implements HasSchemas
                 FileUpload::make('logo')
                     ->label('Logo')
                     ->image()
+                    ->disk('public')
                     ->maxSize(2048)
                     ->imageEditor()
                     ->imageEditorAspectRatios([
@@ -70,6 +71,7 @@ class ManageSiteSettings extends Page implements HasSchemas
                 FileUpload::make('default_og_image')
                     ->label('Gambar OG Default')
                     ->image()
+                    ->disk('public')
                     ->maxSize(2048), // maks 2MB
                 TextInput::make('owner_name')
                     ->label('Nama Owner'),

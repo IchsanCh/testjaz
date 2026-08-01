@@ -37,6 +37,7 @@ class ArticleForm
                 FileUpload::make('cover_image')
                     ->label('Gambar Sampul')
                     ->image()
+                    ->disk('public')
                     ->maxSize(2048)
                     ->imageEditor()
                     ->columnSpanFull(),

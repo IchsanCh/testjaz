@@ -204,12 +204,24 @@ window.hijazRehydrate = function (root) {
 // kalau request-nya AJAX (lihat ArtikelController::index). URL browser tetep
 // ke-update (pushState) biar bisa di-share/di-bookmark, dan tombol back/forward
 // browser tetep jalan (popstate). ---
+// Baca param "kategori" dari query string, robust ke 2 kemungkinan format:
+// - kategori[]=a&kategori[]=b   (dari buildUrl() di JS ini)
+// - kategori[0]=a&kategori[1]=b (dari http_build_query bawaan PHP, dipake pagination Laravel)
+function parseKategoriParams(searchString) {
+    const params = new URLSearchParams(searchString);
+    const result = [];
+    for (const [key, value] of params.entries()) {
+        if (key === "kategori[]" || /^kategori\[\d*\]$/.test(key)) {
+            result.push(value);
+        }
+    }
+    return result;
+}
+
 window.artikelSearch = function () {
     return {
         q: new URLSearchParams(window.location.search).get("q") || "",
-        kategori: new URLSearchParams(window.location.search).getAll(
-            "kategori[]"
-        ),
+        kategori: parseKategoriParams(window.location.search),
         loading: false,
         debounceTimer: null,
 
@@ -217,7 +229,7 @@ window.artikelSearch = function () {
             window.addEventListener("popstate", () => {
                 const params = new URLSearchParams(window.location.search);
                 this.q = params.get("q") || "";
-                this.kategori = params.getAll("kategori[]");
+                this.kategori = parseKategoriParams(window.location.search);
                 this.fetchResults(false);
             });
         },
