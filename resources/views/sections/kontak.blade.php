@@ -25,17 +25,23 @@
 
             <div class="space-y-4 font-sans text-sm md:text-base">
                 <a href="https://wa.me/6281234567890" target="_blank" rel="noopener"
-                    class="flex items-center gap-3 text-base-content/80 hover:text-brand transition-colors">
-                    <span class="text-base-content/40">WhatsApp</span>
+                    class="flex items-center gap-3 text-base-content font-semibold hover:text-brand transition-colors">
+                    <span class="text-base-content/80">WhatsApp</span>
                     <span>+62 812-3456-7890</span>
                 </a>
                 <div class="flex items-center gap-3 text-base-content/80">
-                    <span class="text-base-content/40">Email</span>
-                    <span>info@alhijaz.test</span>
+                    <a href="mailto:info@alhijaz.test" target="_blank" rel="noopener"
+                        class="flex items-center gap-3 text-base-content font-semibold hover:text-brand transition-colors">
+                        <span class="text-base-content/80">Email</span>
+                        <span>info@alhijaz.test</span>
+                    </a>
                 </div>
                 <div class="flex items-center gap-3 text-base-content/80">
-                    <span class="text-base-content/40">Lokasi</span>
-                    <span>Pekalongan, Jawa Tengah</span>
+                    <a href="https://www.google.com/maps?q=-6.889876,109.675432" target="_blank" rel="noopener"
+                        class="flex items-center gap-3 text-base-content font-semibold hover:text-brand transition-colors">
+                        <span class="text-base-content/80">Lokasi</span>
+                        <span>Pekalongan, Jawa Tengah</span>
+                    </a>
                 </div>
             </div>
         </div>

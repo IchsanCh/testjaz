@@ -1,7 +1,6 @@
 <x-layout title="Artikel & Wawasan"
     description="Cerita, proses, dan tips seputar sarung tenun dari AL HIJAZ — dari perawatan kain sampai perjalanan benang jadi motif."
-    :canonical="route('artikel.index')"
-    :robots="($keyword !== '' || count($selectedCategories) > 0) ? 'noindex, follow' : 'index, follow'">
+    :canonical="route('artikel.index')" :robots="($keyword !== '' || count($selectedCategories) > 0) ? 'noindex, follow' : 'index, follow'">
     <x-navbar />
 
     <main x-data="artikelSearch()" x-init="init()" x-on:paginate.window="fetchResults(true, $event.detail)">
@@ -165,5 +164,7 @@
         @endif
     </main>
 
-    @include('sections.footer')
+    @include('sections.footer', [
+        'showCta' => false,
+    ])
 </x-layout>

@@ -1,11 +1,49 @@
 @props(['url', 'title'])
 
-<div class="flex items-center gap-3" x-data="{ copied: false }">
+<div class="flex items-center gap-3" x-data="{
+    copied: false,
+    copyFailed: false,
+    copyLink() {
+        const showResult = (success) => {
+            if (success) {
+                this.copied = true;
+                setTimeout(() => this.copied = false, 2000);
+            } else {
+                this.copyFailed = true;
+                setTimeout(() => this.copyFailed = false, 2000);
+            }
+        };
+
+        // navigator.clipboard cuma ada di secure context (HTTPS/localhost).
+        // Kalau gak ada (misal diakses via HTTP biasa), fallback ke cara lama.
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText('{{ $url }}')
+                .then(() => showResult(true))
+                .catch(() => showResult(false));
+            return;
+        }
+
+        try {
+            const temp = document.createElement('textarea');
+            temp.value = '{{ $url }}';
+            temp.style.position = 'fixed';
+            temp.style.opacity = '0';
+            document.body.appendChild(temp);
+            temp.focus();
+            temp.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(temp);
+            showResult(ok);
+        } catch (e) {
+            showResult(false);
+        }
+    },
+}">
     <span class="font-sans text-xs text-base-content/50 tracking-wide uppercase mr-1">Bagikan</span>
 
     {{-- WhatsApp --}}
-    <a href="https://api.whatsapp.com/send?text={{ rawurlencode($title . ' - ' . $url) }}" target="_blank" rel="noopener"
-        aria-label="Bagikan ke WhatsApp"
+    <a href="https://api.whatsapp.com/send?text={{ rawurlencode('"' . $title . '" — baca selengkapnya di AL HIJAZ: ' . $url) }}"
+        target="_blank" rel="noopener" aria-label="Bagikan ke WhatsApp"
         class="w-9 h-9 flex items-center justify-center rounded-full bg-base-200 hover:bg-primary hover:text-primary-content text-base-content/70 transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
             <path
@@ -14,8 +52,8 @@
     </a>
 
     {{-- Facebook --}}
-    <a href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode($url) }}" target="_blank" rel="noopener"
-        aria-label="Bagikan ke Facebook"
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode($url) }}&quote={{ rawurlencode($title . ' — AL HIJAZ') }}"
+        target="_blank" rel="noopener" aria-label="Bagikan ke Facebook"
         class="w-9 h-9 flex items-center justify-center rounded-full bg-base-200 hover:bg-primary hover:text-primary-content text-base-content/70 transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
             <path
@@ -24,7 +62,7 @@
     </a>
 
     {{-- X / Twitter --}}
-    <a href="https://twitter.com/intent/tweet?url={{ rawurlencode($url) }}&text={{ rawurlencode($title) }}"
+    <a href="https://twitter.com/intent/tweet?url={{ rawurlencode($url) }}&text={{ rawurlencode('"' . $title . '" via AL HIJAZ') }}"
         target="_blank" rel="noopener" aria-label="Bagikan ke X"
         class="w-9 h-9 flex items-center justify-center rounded-full bg-base-200 hover:bg-primary hover:text-primary-content text-base-content/70 transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -34,10 +72,25 @@
     </a>
 
     {{-- Copy link --}}
-    <button type="button"
-        @click="navigator.clipboard.writeText('{{ $url }}'); copied = true; setTimeout(() => copied = false, 2000)"
-        aria-label="Salin tautan"
-        class="w-9 h-9 flex items-center justify-center rounded-full bg-base-200 hover:bg-primary hover:text-primary-content text-base-content/70 transition-colors relative">
+    <button type="button" @click="copyLink()" aria-label="Salin tautan"
+        class="relative w-9 h-9 flex items-center justify-center rounded-full bg-base-200 hover:bg-primary hover:text-primary-content text-base-content/70 transition-colors">
+
+        {{-- Tooltip notifikasi --}}
+        <span x-show="copied" x-cloak x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="absolute -top-9 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-xs font-sans whitespace-nowrap px-3 py-1.5 rounded-full shadow-lg">
+            Tautan disalin!
+        </span>
+        <span x-show="copyFailed" x-cloak x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="absolute -top-9 left-1/2 -translate-x-1/2 bg-error text-white text-xs font-sans whitespace-nowrap px-3 py-1.5 rounded-full shadow-lg">
+            Gagal menyalin
+        </span>
+
         <svg x-show="!copied" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
             class="w-4 h-4">
             <path

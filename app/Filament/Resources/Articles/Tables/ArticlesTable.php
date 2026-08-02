@@ -16,7 +16,9 @@ class ArticlesTable
         return $table
             ->columns([
                 ImageColumn::make('cover_image')
-                    ->label('Sampul'),
+                    ->label('Sampul')
+                    ->disk('public')
+                    ->width(100),
                 TextColumn::make('title')
                     ->label('Judul')
                     ->searchable(),

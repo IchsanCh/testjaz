@@ -18,7 +18,7 @@
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
 
-    <main class="pt-32 md:pt-40 pb-16 md:pb-24 bg-base-100">
+    <main class="pt-24 md:pt-28 pb-16 md:pb-24 bg-base-100">
         <div class="max-w-7xl mx-auto px-6 md:px-16">
 
             <a href="{{ route('artikel.index') }}"
@@ -53,16 +53,12 @@
                         </span>
                     </div>
 
-                    <h1 class="font-serif text-3xl md:text-5xl font-bold text-base-content leading-tight mb-8">
+                    <h1
+                        class="font-serif text-3xl border-base-300 border-b md:text-5xl font-bold text-base-content leading-tight mb-8">
                         {{ $article->title }}
                     </h1>
 
-                    <div class="flex items-center justify-between border-y border-base-300 py-4 mb-10">
-                        <span class="font-sans text-sm text-base-content/50">AL HIJAZ</span>
-                        <x-share-buttons :url="url()->current()" :title="$article->title" />
-                    </div>
-
-                    <div class="prose prose-hijaz max-w-none prose-lg">
+                    <div class="prose prose-hijaz  max-w-none prose-lg">
                         {!! $article->content !!}
                     </div>
 
@@ -82,7 +78,7 @@
                             <h2 class="font-serif text-lg font-semibold text-white">Artikel Lainnya</h2>
                         </div>
 
-                        <div class="space-y-5">
+                        <div class="space-y-5 border-base-300 border-1 rounded-2xl">
                             @foreach ($related as $item)
                                 <a href="{{ route('artikel.show', $item) }}" data-cursor-text="Baca"
                                     class="flex gap-4 group">
@@ -92,10 +88,13 @@
                                     </div>
                                     <div class="min-w-0">
                                         <h3
-                                            class="font-serif text-sm font-semibold leading-snug line-clamp-2 group-hover:text-brand transition-colors">
+                                            class="font-serif text-md font-semibold leading-snug line-clamp-2 group-hover:text-brand transition-colors">
                                             {{ $item->title }}
                                         </h3>
-                                        <p class="font-sans text-xs text-base-content/40 mt-1.5">
+                                        <p class="font-sans text-xs text-base-content mt-1 line-clamp-2">
+                                            {{ $item->excerpt }}
+                                        </p>
+                                        <p class="font-sans text-xs text-base-content/80 mt-1.5">
                                             {{ $item->updated_at->locale('id')->translatedFormat('d M Y') }}
                                             @if ($item->category)
                                                 &middot; {{ $item->category->name }}
@@ -111,5 +110,7 @@
         </div>
     </main>
 
-    @include('sections.footer')
+    @include('sections.footer', [
+        'showCta' => false,
+    ])
 </x-layout>
