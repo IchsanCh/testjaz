@@ -3,7 +3,30 @@ import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
 
-Alpine.start();
+// --- Toast notification store — dipanggil dari mana aja lewat window.hijazNotify().
+// Registrasi store harus sebelum Alpine.start() (paling bawah file ini), tapi gak
+// masalah didefinisikan di atas gini karena cuma nyimpen state, belum butuh window.xxx
+// lain yang didefinisikan belakangan. ---
+let toastSeq = 0;
+Alpine.store("toasts", {
+    items: [],
+    add(type, title, message, duration = 5000) {
+        const id = ++toastSeq;
+        this.items.push({ id, type, title, message, visible: true });
+        setTimeout(() => this.remove(id), duration);
+    },
+    remove(id) {
+        const toast = this.items.find((t) => t.id === id);
+        if (toast) toast.visible = false;
+        // Kasih waktu buat transisi keluar kelar dulu baru bener-bener dibuang dari array
+        setTimeout(() => {
+            this.items = this.items.filter((t) => t.id !== id);
+        }, 250);
+    },
+});
+window.hijazNotify = function (type, title, message, duration) {
+    Alpine.store("toasts").add(type, title, message, duration);
+};
 
 // --- Custom cursor ring ---
 // Cuma jalan di device yang punya pointer halus (mouse), dan kalau user gak minta reduced motion
@@ -199,6 +222,77 @@ window.hijazRehydrate = function (root) {
     initTiltCards(root);
 };
 
+// --- Form kontak — submit via AJAX (bukan reload penuh), state loading
+// nge-disable tombol, notifikasi hasilnya lewat toast (window.hijazNotify). ---
+window.kontakForm = function (endpoint) {
+    return {
+        submitting: false,
+        errors: {},
+        form: {
+            name: "",
+            email: "",
+            message: "",
+        },
+
+        async submit() {
+            if (this.submitting) return;
+            this.submitting = true;
+            this.errors = {};
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": document.querySelector(
+                            'meta[name="csrf-token"]'
+                        ).content,
+                    },
+                    body: JSON.stringify(this.form),
+                });
+
+                const data = await res.json().catch(() => ({}));
+
+                if (res.status === 422) {
+                    this.errors = data.errors || {};
+                    window.hijazNotify(
+                        "error",
+                        "Ada yang perlu diperbaiki",
+                        "Cek lagi isian form-nya ya."
+                    );
+                    return;
+                }
+
+                if (!res.ok) {
+                    throw new Error(data.message || `HTTP ${res.status}`);
+                }
+
+                this.form = {
+                    name: "",
+                    email: "",
+                    message: "",
+                };
+                window.hijazNotify(
+                    "success",
+                    "Pesan terkirim!",
+                    data.message ||
+                        "Terima kasih, tim kami akan segera menghubungi Anda."
+                );
+            } catch (e) {
+                window.hijazNotify(
+                    "error",
+                    "Gagal mengirim pesan",
+                    "Coba lagi dalam beberapa saat, atau kirim email langsung ke kami."
+                );
+            } finally {
+                this.submitting = false;
+            }
+        },
+    };
+};
+
 // --- Live search + filter kategori (multi-select) buat halaman /artikel.
 // Fetch ke URL yang sama (query string berubah), controller balikin partial HTML
 // kalau request-nya AJAX (lihat ArtikelController::index). URL browser tetep
@@ -282,3 +376,10 @@ window.artikelSearch = function () {
         },
     };
 };
+
+// Alpine.start() sengaja ditaro paling akhir, setelah SEMUA window.xxx = function(){}
+// di atas ke-define. Alpine langsung nge-scan & inisialisasi semua x-data begitu
+// start() dipanggil — kalau dipanggil duluan (kayak sebelumnya, di baris paling atas),
+// x-data yang butuh fungsi global (artikelSearch(), dst) bakal gagal senyap
+// karena fungsinya belum ke-load pas Alpine coba pakai.
+Alpine.start();

@@ -4,13 +4,13 @@
 
     <main x-data="artikelSearch()" x-init="init()" x-on:paginate.window="fetchResults(true, $event.detail)">
 
-        {{-- Header --}}
-        <section class="relative pt-40 pb-16 md:pt-48 md:pb-20 overflow-hidden bg-neutral-950">
+        {{-- Header — cuma judul + search, ringkas --}}
+        <section class="relative pt-40 pb-20 md:pt-48 md:pb-24 overflow-hidden bg-neutral-950">
             <img src="{{ asset('images/hero-yarn.webp') }}" alt=""
                 class="absolute inset-0 w-full h-full object-cover opacity-40" loading="eager">
             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/75 to-black/90"></div>
 
-            <div class="relative z-10 max-w-3xl mx-auto px-6 md:px-16 text-center">
+            <div class="relative z-10 max-w-2xl mx-auto px-6 md:px-16 text-center">
                 <div class="flex items-center justify-center gap-3 mb-6">
                     <span class="h-px w-10 bg-secondary"></span>
                     <span class="text-secondary font-sans text-xs md:text-sm tracking-[0.3em] uppercase">Artikel</span>
@@ -20,8 +20,7 @@
                     Cerita &amp; Wawasan
                 </h1>
 
-                {{-- Search --}}
-                <div class="relative max-w-xl mx-auto mb-6">
+                <div class="relative max-w-xl mx-auto">
                     <svg xmlns="http://www.w3.org/2000/svg"
                         class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" viewBox="0 0 20 20"
                         fill="currentColor">
@@ -30,37 +29,48 @@
                             clip-rule="evenodd" />
                     </svg>
                     <input type="text" x-model="q" x-on:input="onKeywordInput()"
-                        placeholder="Cari judul artikel..."
+                        placeholder="Cari judul atau isi artikel..."
                         class="w-full bg-white/10 border border-white/20 focus:border-secondary rounded-full py-3.5 pl-11 pr-5 text-white placeholder-white/50 font-sans text-sm outline-none transition-colors">
                 </div>
-
-                {{-- Filter kategori — multi-select --}}
-                @if ($categories->isNotEmpty())
-                    <div class="flex flex-wrap items-center justify-center gap-2">
-                        @foreach ($categories as $category)
-                            <button type="button" x-on:click="toggleKategori('{{ $category->slug }}')"
-                                :class="kategori.includes('{{ $category->slug }}') ?
-                                    'bg-secondary text-neutral-900 border-secondary' :
-                                    'bg-white/5 text-white/70 border-white/20 hover:border-white/40'"
-                                class="px-4 py-1.5 rounded-full border text-xs font-sans transition-colors">
-                                {{ $category->name }}
-                                <span class="opacity-60">({{ $category->published_articles_count }})</span>
-                            </button>
-                        @endforeach
-
-                        <button type="button" x-show="q || kategori.length" x-cloak
-                            x-on:click="q = ''; kategori = []; fetchResults();"
-                            class="px-4 py-1.5 rounded-full text-xs font-sans text-white/50 hover:text-white transition-colors">
-                            Reset &times;
-                        </button>
-                    </div>
-                @endif
             </div>
         </section>
 
-        {{-- Grid --}}
-        <section class="py-20 md:py-28 bg-base-100">
-            <div class="max-w-7xl mx-auto px-6 md:px-16">
+        {{-- Konten: sidebar filter (nempel, gak perlu scroll balik ke atas) + grid hasil --}}
+        <section class="py-16 md:py-24 bg-base-100">
+            <div class="max-w-7xl mx-auto px-6 md:px-16 grid lg:grid-cols-[240px_1fr] gap-10 lg:gap-12 items-start">
+
+                {{-- Sidebar kategori --}}
+                @if ($categories->isNotEmpty())
+                    <aside class="lg:sticky lg:top-28">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-base-content/50">
+                                Kategori
+                            </h2>
+                            <button type="button" x-show="q || kategori.length" x-cloak
+                                x-on:click="q = ''; kategori = []; fetchResults();"
+                                class="font-sans text-xs text-brand hover:underline">
+                                Reset
+                            </button>
+                        </div>
+
+                        {{-- Mobile: scroll horizontal chip. Desktop: list vertikal nempel --}}
+                        <div
+                            class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 -mx-6 px-6 lg:mx-0 lg:px-0">
+                            @foreach ($categories as $category)
+                                <button type="button" x-on:click="toggleKategori('{{ $category->slug }}')"
+                                    :class="kategori.includes('{{ $category->slug }}') ?
+                                        'bg-primary text-primary-content border-primary' :
+                                        'bg-base-200 text-base-content/70 border-base-content/10 hover:border-brand/40'"
+                                    class="shrink-0 lg:w-full lg:text-left flex items-center justify-between gap-2 px-4 py-2 rounded-full lg:rounded-lg border text-sm font-sans transition-colors whitespace-nowrap">
+                                    {{ $category->name }}
+                                    <span class="opacity-60 text-xs">{{ $category->published_articles_count }}</span>
+                                </button>
+                            @endforeach
+                        </div>
+                    </aside>
+                @endif
+
+                {{-- Grid hasil --}}
                 <div class="relative">
                     {{-- Loading overlay — motif sama kayak entrance (benang lungsin + sekoci) --}}
                     <div x-show="loading" x-cloak x-transition:enter="transition ease-out duration-200"
@@ -77,7 +87,7 @@
                     </div>
 
                     <div id="artikel-grid" :class="loading ? 'opacity-60' : ''"
-                        class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 transition-opacity duration-300">
+                        class="grid sm:grid-cols-2 gap-8 transition-opacity duration-300">
                         @include('artikel.partials.grid')
                     </div>
                 </div>

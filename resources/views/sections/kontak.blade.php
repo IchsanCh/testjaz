@@ -1,7 +1,7 @@
 {{--
     Section: Kontak
-    Belum ke-connect ke DB — form submit-nya nanti diarahin ke route POST /kontak,
-    disimpen ke ContactSubmission
+    Submit-nya AJAX ke POST /kontak (ContactController@store), disimpen ke ContactSubmission.
+    Lihat kontakForm() di resources/js/app.js buat logic submit-nya.
 --}}
 <section class="py-24 md:py-32 bg-base-300 text-base-content" id="kontak">
     <div class="max-w-7xl mx-auto px-6 md:px-16 grid md:grid-cols-2 gap-16 items-start">
@@ -41,34 +41,49 @@
         </div>
 
         {{-- Form --}}
-        <form method="POST" action="{{ url('/kontak') }}"
+        <form x-data="kontakForm('{{ route('kontak.store') }}')" x-on:submit.prevent="submit()"
             class="bg-base-100 rounded-2xl p-6 md:p-8 space-y-5 reveal reveal-delay-1">
-            @csrf
 
             <div>
                 <label for="name" class="block font-sans text-sm text-base-content/60 mb-2">Nama</label>
-                <input type="text" name="name" id="name" required
-                    class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors"
-                    placeholder="Nama lengkap">
+                <input type="text" name="name" id="name" x-model="form.name" :disabled="submitting"
+                    class="w-full bg-base-200 border rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors disabled:opacity-60"
+                    :class="errors.name ? 'border-primary' : 'border-base-300'" placeholder="Nama lengkap">
+                <p x-show="errors.name" x-cloak x-text="errors.name?.[0]" class="text-primary text-xs mt-1.5 font-sans">
+                </p>
             </div>
 
             <div>
                 <label for="email" class="block font-sans text-sm text-base-content/60 mb-2">Email</label>
-                <input type="email" name="email" id="email" required
-                    class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors"
-                    placeholder="nama@email.com">
+                <input type="email" name="email" id="email" x-model="form.email" :disabled="submitting"
+                    class="w-full bg-base-200 border rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors disabled:opacity-60"
+                    :class="errors.email ? 'border-primary' : 'border-base-300'" placeholder="nama@email.com">
+                <p x-show="errors.email" x-cloak x-text="errors.email?.[0]"
+                    class="text-primary text-xs mt-1.5 font-sans">
+                </p>
             </div>
 
             <div>
                 <label for="message" class="block font-sans text-sm text-base-content/60 mb-2">Pesan</label>
-                <textarea name="message" id="message" rows="4" required
-                    class="w-full bg-base-200 border border-base-300 rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors resize-none"
-                    placeholder="Tulis pertanyaan atau pesan Anda"></textarea>
+                <textarea name="message" id="message" rows="4" x-model="form.message" :disabled="submitting"
+                    class="w-full bg-base-200 border rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors resize-none disabled:opacity-60"
+                    :class="errors.message ? 'border-primary' : 'border-base-300'" placeholder="Tulis pertanyaan atau pesan Anda"></textarea>
+                <p x-show="errors.message" x-cloak x-text="errors.message?.[0]"
+                    class="text-primary text-xs mt-1.5 font-sans"></p>
             </div>
 
-            <button type="submit"
-                class="w-full bg-primary text-primary-content font-sans font-semibold py-3.5 rounded-lg transition-all hover:brightness-110">
-                Kirim Pesan
+            <button type="submit" :disabled="submitting"
+                class="w-full bg-primary text-primary-content font-sans font-semibold py-3.5 rounded-lg transition-all hover:brightness-110 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3">
+                <span x-show="!submitting">Kirim Pesan</span>
+                <span x-show="submitting" x-cloak class="flex items-center gap-3">
+                    <span class="loom-spinner loom-spinner--btn" aria-hidden="true">
+                        @for ($i = 0; $i < 4; $i++)
+                            <span class="loom-spinner__warp" style="--i: {{ $i }}"></span>
+                        @endfor
+                        <span class="loom-spinner__shuttle"></span>
+                    </span>
+                    Mengirim...
+                </span>
             </button>
         </form>
 
