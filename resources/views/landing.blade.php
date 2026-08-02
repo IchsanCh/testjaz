@@ -1,4 +1,4 @@
-<x-layout :show-entrance="true">
+<x-layout showEntrance="true">
     <x-navbar />
 
     <main>

@@ -18,6 +18,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{ $pageTitle }}</title>
@@ -79,7 +80,7 @@
     </div>
 
     {{-- Toast notification — dipanggil lewat window.hijazNotify(type, title, message) --}}
-    <div class="toast-stack" aria-live="polite">
+    <div class="toast-stack" x-data aria-live="polite">
         <template x-for="toast in $store.toasts.items" :key="toast.id">
             <div class="toast-card" :class="toast.type === 'error' ? 'toast-card--error' : 'toast-card--success'"
                 x-show="toast.visible" x-transition:enter="transition ease-out duration-300"

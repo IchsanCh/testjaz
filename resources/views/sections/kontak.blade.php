@@ -46,7 +46,8 @@
 
             <div>
                 <label for="name" class="block font-sans text-sm text-base-content/60 mb-2">Nama</label>
-                <input type="text" name="name" id="name" x-model="form.name" :disabled="submitting"
+                <input type="text" name="name" id="name" x-model="form.name"
+                    x-on:blur="validateField('name')" :disabled="submitting" required
                     class="w-full bg-base-200 border rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors disabled:opacity-60"
                     :class="errors.name ? 'border-primary' : 'border-base-300'" placeholder="Nama lengkap">
                 <p x-show="errors.name" x-cloak x-text="errors.name?.[0]" class="text-primary text-xs mt-1.5 font-sans">
@@ -55,7 +56,8 @@
 
             <div>
                 <label for="email" class="block font-sans text-sm text-base-content/60 mb-2">Email</label>
-                <input type="email" name="email" id="email" x-model="form.email" :disabled="submitting"
+                <input type="email" name="email" id="email" x-model="form.email"
+                    x-on:blur="validateField('email')" :disabled="submitting" required
                     class="w-full bg-base-200 border rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors disabled:opacity-60"
                     :class="errors.email ? 'border-primary' : 'border-base-300'" placeholder="nama@email.com">
                 <p x-show="errors.email" x-cloak x-text="errors.email?.[0]"
@@ -65,7 +67,8 @@
 
             <div>
                 <label for="message" class="block font-sans text-sm text-base-content/60 mb-2">Pesan</label>
-                <textarea name="message" id="message" rows="4" x-model="form.message" :disabled="submitting"
+                <textarea name="message" id="message" rows="4" x-model="form.message" x-on:blur="validateField('message')"
+                    :disabled="submitting" required
                     class="w-full bg-base-200 border rounded-lg px-4 py-3 text-base-content placeholder:text-base-content/30 focus:outline-none focus:border-brand transition-colors resize-none disabled:opacity-60"
                     :class="errors.message ? 'border-primary' : 'border-base-300'" placeholder="Tulis pertanyaan atau pesan Anda"></textarea>
                 <p x-show="errors.message" x-cloak x-text="errors.message?.[0]"

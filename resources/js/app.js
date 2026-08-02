@@ -234,8 +234,51 @@ window.kontakForm = function (endpoint) {
             message: "",
         },
 
+        // Aturan validasi sisi client — dipake buat live-check pas blur, dan
+        // sekali lagi pas submit sebelum request beneran dikirim. required di
+        // HTML tetep dipertahankan sebagai jaring pengaman kalau-kalau Alpine
+        // gagal nyala sama sekali, tapi ini yang ngasih pesan error yang rapi.
+        rules: {
+            name: (v) => (!v || !v.trim() ? "Nama wajib diisi." : null),
+            email: (v) => {
+                if (!v || !v.trim()) return "Email wajib diisi.";
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())) {
+                    return "Format email tidak valid.";
+                }
+                return null;
+            },
+            message: (v) => (!v || !v.trim() ? "Pesan wajib diisi." : null),
+        },
+
+        validateField(field) {
+            const message = this.rules[field](this.form[field]);
+            const rest = { ...this.errors };
+            if (message) {
+                rest[field] = [message];
+            } else {
+                delete rest[field];
+            }
+            this.errors = rest;
+        },
+
+        validateAll() {
+            Object.keys(this.rules).forEach((field) =>
+                this.validateField(field)
+            );
+            return Object.keys(this.errors).length === 0;
+        },
+
         async submit() {
             if (this.submitting) return;
+            if (!this.validateAll()) {
+                window.hijazNotify(
+                    "error",
+                    "Ada yang perlu diperbaiki",
+                    "Cek lagi isian form-nya ya."
+                );
+                return;
+            }
+
             this.submitting = true;
             this.errors = {};
 
