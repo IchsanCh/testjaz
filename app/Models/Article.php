@@ -43,4 +43,12 @@ class Article extends Model
     {
         return Str::limit(strip_tags($this->content), 120);
     }
+
+    // Estimasi waktu baca, asumsi rata-rata 200 kata/menit, minimal 1 menit
+    public function getReadingTimeAttribute(): int
+    {
+        $wordCount = str_word_count(strip_tags($this->content));
+
+        return max(1, (int) ceil($wordCount / 200));
+    }
 }

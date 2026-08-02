@@ -1,8 +1,10 @@
+@props(['forceSolid' => false])
+
 <nav x-data="{
-    scrolled: false,
+    scrolled: {{ $forceSolid ? 'true' : 'false' }},
     mobileOpen: false,
     isDark: document.documentElement.getAttribute('data-theme') === 'alhijaz-dark',
-}" x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 60);
+}" x-init="@if (!$forceSolid) window.addEventListener('scroll', () => scrolled = window.scrollY > 60); @endif
 window.addEventListener('theme-changed', (e) => isDark = e.detail.theme === 'alhijaz-dark');"
     :class="scrolled ? 'bg-base-100/95 backdrop-blur-sm border-b border-base-300 py-4' : 'bg-transparent py-6'"
     class="fixed top-0 left-0 right-0 z-40 px-6 md:px-16 transition-all duration-300">
@@ -30,8 +32,8 @@ window.addEventListener('theme-changed', (e) => isDark = e.detail.theme === 'alh
 
             <button type="button" onclick="toggleTheme()"
                 :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
-                :data-cursor-text="isDark ? 'Mode Terang' : 'Mode Gelap'"
-                class="transition-colors duration-300" aria-label="Ganti tema terang/gelap">
+                :data-cursor-text="isDark ? 'Mode Terang' : 'Mode Gelap'" class="transition-colors duration-300"
+                aria-label="Ganti tema terang/gelap">
                 <svg x-show="!isDark" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20"
                     fill="currentColor">
                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
@@ -46,8 +48,7 @@ window.addEventListener('theme-changed', (e) => isDark = e.detail.theme === 'alh
         </div>
 
         {{-- Mobile hamburger --}}
-        <button type="button" @click="mobileOpen = !mobileOpen"
-            :class="scrolled ? 'text-base-content' : 'text-white'"
+        <button type="button" @click="mobileOpen = !mobileOpen" :class="scrolled ? 'text-base-content' : 'text-white'"
             :data-cursor-text="mobileOpen ? 'Tutup' : 'Menu'" class="md:hidden transition-colors duration-300"
             aria-label="Buka menu">
             <svg x-show="!mobileOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 20 20"

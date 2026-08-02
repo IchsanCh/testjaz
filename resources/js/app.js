@@ -361,6 +361,7 @@ window.artikelSearch = function () {
         kategori: parseKategoriParams(window.location.search),
         loading: false,
         debounceTimer: null,
+        filterSheetOpen: false,
 
         init() {
             window.addEventListener("popstate", () => {
