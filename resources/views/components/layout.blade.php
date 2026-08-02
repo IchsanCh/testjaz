@@ -4,6 +4,12 @@
     'ogTitle' => null,
     'ogDescription' => null,
     'ogImage' => null,
+    'ogType' => 'website',
+    'canonical' => null,
+    'robots' => 'index, follow',
+    'publishedTime' => null,
+    'modifiedTime' => null,
+    'articleSection' => null,
     'showEntrance' => false,
 ])
 
@@ -11,6 +17,8 @@
     $settings = \App\Models\SiteSetting::current();
     $pageTitle = $title ?? ($settings->default_meta_title ?? $settings->app_name);
     $pageDescription = $description ?? $settings->default_meta_description;
+    $resolvedOgImage = $ogImage ?? $settings->default_og_image;
+    $canonicalUrl = $canonical ?? url()->current();
 @endphp
 
 <!doctype html>
@@ -23,16 +31,41 @@
 
     <title>{{ $pageTitle }}</title>
     <meta name="description" content="{{ $pageDescription }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+    <meta name="robots" content="{{ $robots }}">
+
+    {{-- Open Graph --}}
     <meta property="og:title" content="{{ $ogTitle ?? $pageTitle }}">
     <meta property="og:description" content="{{ $ogDescription ?? $pageDescription }}">
-    @if ($ogImage ?? $settings->default_og_image)
-        <meta property="og:image" content="{{ asset('storage/' . ($ogImage ?? $settings->default_og_image)) }}">
+    <meta property="og:type" content="{{ $ogType }}">
+    <meta property="og:url" content="{{ $canonicalUrl }}">
+    <meta property="og:site_name" content="{{ $settings->app_name }}">
+    @if ($resolvedOgImage)
+        <meta property="og:image" content="{{ asset('storage/' . $resolvedOgImage) }}">
     @endif
-    <meta property="og:type" content="website">
-    <meta name="robots" content="index, follow">
+    @if ($ogType === 'article')
+        @if ($publishedTime)
+            <meta property="article:published_time" content="{{ $publishedTime }}">
+        @endif
+        @if ($modifiedTime)
+            <meta property="article:modified_time" content="{{ $modifiedTime }}">
+        @endif
+        @if ($articleSection)
+            <meta property="article:section" content="{{ $articleSection }}">
+        @endif
+    @endif
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="{{ $resolvedOgImage ? 'summary_large_image' : 'summary' }}">
+    <meta name="twitter:title" content="{{ $ogTitle ?? $pageTitle }}">
+    <meta name="twitter:description" content="{{ $ogDescription ?? $pageDescription }}">
+    @if ($resolvedOgImage)
+        <meta name="twitter:image" content="{{ asset('storage/' . $resolvedOgImage) }}">
+    @endif
 
     @if ($settings->logo)
         <link rel="icon" href="{{ asset('storage/' . $settings->logo) }}">
+
     @else
         <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     @endif

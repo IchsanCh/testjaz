@@ -1,5 +1,22 @@
-<x-layout :title="$article->meta_title ?? $article->title" :description="$article->meta_description" :og-title="$article->title" :og-description="$article->meta_description" :og-image="$article->cover_image">
+<x-layout :title="$article->meta_title ?? $article->title" :description="$article->meta_description" :og-title="$article->title" :og-description="$article->meta_description" :og-image="$article->cover_image" og-type="article"
+    :canonical="route('artikel.show', $article)" :published-time="$article->created_at->toAtomString()" :modified-time="$article->updated_at->toAtomString()" :article-section="$article->category?->name">
     <x-navbar :force-solid="true" />
+
+    {{-- JSON-LD — biar Google bisa nampilin rich result (tanggal, gambar, dll) --}}
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Article',
+            'headline' => $article->title,
+            'description' => $article->meta_description,
+            'image' => $article->cover_image ? asset('storage/' . $article->cover_image) : asset('images/craft.webp'),
+            'datePublished' => $article->created_at->toAtomString(),
+            'dateModified' => $article->updated_at->toAtomString(),
+            'author' => ['@type' => 'Organization', 'name' => 'AL HIJAZ'],
+            'publisher' => ['@type' => 'Organization', 'name' => 'AL HIJAZ'],
+            'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => route('artikel.show', $article)],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 
     <main class="pt-32 md:pt-40 pb-16 md:pb-24 bg-base-100">
         <div class="max-w-7xl mx-auto px-6 md:px-16">
