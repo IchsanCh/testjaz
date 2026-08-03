@@ -15,11 +15,8 @@ class ProductsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('images')
-                    ->label('Gambar')
-                    ->circular(false)
-                    ->stacked()
-                    ->limit(1),
+                ImageColumn::make('thumbnail_url')
+                    ->label('Thumbnail'),
                 TextColumn::make('category.name')
                     ->label('Kategori')
                     ->sortable()
@@ -27,6 +24,16 @@ class ProductsTable
                 TextColumn::make('name')
                     ->label('Nama Motif')
                     ->searchable(),
+                TextColumn::make('spec_label')
+                    ->label('Spesifikasi')
+                    ->placeholder('—'),
+                TextColumn::make('edition')
+                    ->label('Edisi')
+                    ->badge()
+                    ->placeholder('—'),
+                TextColumn::make('images_count')
+                    ->label('Jml Foto')
+                    ->counts('images'),
                 TextColumn::make('sort_order')
                     ->label('Urutan')
                     ->numeric()

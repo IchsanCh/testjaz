@@ -46,24 +46,25 @@ class ManageSiteSettings extends Page implements HasSchemas
                 TextInput::make('app_name')
                     ->label('Nama Aplikasi/Situs')
                     ->required(),
-                FileUpload::make('logo')
-                    ->label('Logo')
-                    ->image()
-                    ->disk('public')
-                    ->maxSize(2048)
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([
-                        '1:1',
-                        null, // biarin bebas/gak dipaksa crop
-                    ]),
                 TextInput::make('whatsapp_number')
                     ->label('Nomor WhatsApp')
-                    ->required(),
+                    ->required()
+                    ->helperText('Format apapun boleh (08xx, 8xx, atau +62xx) — otomatis dirapikan pas disimpan.'),
                 TextInput::make('email')
                     ->label('Email')
                     ->email(),
                 TextInput::make('address')
                     ->label('Alamat'),
+                TextInput::make('latitude')
+                    ->label('Latitude Toko')
+                    ->numeric()
+                    ->step('0.0000001')
+                    ->helperText('Buat link Google Maps. Contoh: -6.8898760'),
+                TextInput::make('longitude')
+                    ->label('Longitude Toko')
+                    ->numeric()
+                    ->step('0.0000001')
+                    ->helperText('Contoh: 109.6754320'),
                 TextInput::make('default_meta_title')
                     ->label('Meta Title Default'),
                 Textarea::make('default_meta_description')

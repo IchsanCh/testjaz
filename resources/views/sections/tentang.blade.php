@@ -33,14 +33,18 @@
                 kualitas tidak bisa dipercepat, dan warisan tidak bisa dipalsukan.
             </p>
 
-            <blockquote class="bg-base-content text-base-100 rounded-2xl p-6 md:p-8">
-                <p class="font-serif italic text-xl md:text-2xl mb-3">
-                    &ldquo;Setiap helai adalah warisan yang kami jaga turun-temurun.&rdquo;
-                </p>
-                <cite class="font-sans not-italic text-sm opacity-60 tracking-wide">
-                    — Owner AL HIJAZ
-                </cite>
-            </blockquote>
+            @if ($settings->owner_quote)
+                <blockquote class="bg-base-content text-base-100 rounded-2xl p-6 md:p-8">
+                    <p class="font-serif italic text-xl md:text-2xl mb-3">
+                        &ldquo;{{ $settings->owner_quote }}&rdquo;
+                    </p>
+                    @if ($settings->owner_name)
+                        <cite class="font-sans not-italic text-sm opacity-60 tracking-wide">
+                            — {{ $settings->owner_name }}
+                        </cite>
+                    @endif
+                </blockquote>
+            @endif
         </div>
 
     </div>

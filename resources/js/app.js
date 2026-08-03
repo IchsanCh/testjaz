@@ -355,7 +355,8 @@ function parseKategoriParams(searchString) {
     return result;
 }
 
-window.artikelSearch = function () {
+// Factory generik — dipake buat /artikel dan /produk, bedanya cuma id elemen grid-nya
+function catalogSearch(gridId) {
     return {
         q: new URLSearchParams(window.location.search).get("q") || "",
         kategori: parseKategoriParams(window.location.search),
@@ -403,7 +404,7 @@ window.artikelSearch = function () {
                 });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const html = await res.text();
-                const grid = document.getElementById("artikel-grid");
+                const grid = document.getElementById(gridId);
                 grid.innerHTML = html;
                 window.hijazRehydrate(grid);
                 // Cuma scroll ke grid kalau ini dari klik pagination (explicitUrl ada) —
@@ -413,12 +414,20 @@ window.artikelSearch = function () {
                 }
                 if (pushState) window.history.pushState({}, "", url);
             } catch (e) {
-                console.error("Gagal muat artikel:", e);
+                console.error("Gagal muat data:", e);
             } finally {
                 this.loading = false;
             }
         },
     };
+}
+
+window.artikelSearch = function () {
+    return catalogSearch("artikel-grid");
+};
+
+window.produkSearch = function () {
+    return catalogSearch("produk-grid");
 };
 
 // Alpine.start() sengaja ditaro paling akhir, setelah SEMUA window.xxx = function(){}

@@ -13,7 +13,8 @@
                 <span class="reveal-line"><span>Siap Punya Sarung</span></span>
                 <span class="reveal-line"><span class="text-brand italic font-normal">Sendiri?</span></span>
             </h2>
-            <a href="https://wa.me/6281234567890" target="_blank" rel="noopener" aria-label="WhatsApp Hijaz"
+            <a href="https://wa.me/{{ $settings->whatsapp_number }}" target="_blank" rel="noopener"
+                aria-label="WhatsApp Hijaz"
                 class="group inline-flex items-center gap-2 bg-primary text-primary-content px-10 py-5 rounded-full font-sans font-semibold tracking-wide transition-all duration-300 hover:gap-3 hover:brightness-110">
                 Konsultasi via WhatsApp
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:translate-x-1"
@@ -75,7 +76,8 @@
                     Sarung tenun premium dari Pekalongan, ditenun dengan tangan dan dijaga
                     kualitasnya dari generasi ke generasi.
                 </p>
-                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener" aria-label="WhatsApp Hijaz"
+                <a href="https://wa.me/{{ $settings->whatsapp_number }}" target="_blank" rel="noopener"
+                    aria-label="WhatsApp Hijaz"
                     class="group inline-flex items-center gap-2 text-secondary font-sans text-sm font-medium hover:gap-3 transition-all duration-300">
                     Chat via WhatsApp
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -107,15 +109,29 @@
             <div>
                 <h4 class="font-sans text-white text-xs font-semibold tracking-[0.2em] uppercase mb-4">Kontak</h4>
                 <ul class="space-y-3 font-sans text-sm">
-                    <li><a href="https://wa.me/6281234567890" target="_blank" rel="noopener" aria-label="WhatsApp Hijaz"
-                            class="hover:text-secondary transition-colors">+62 812-3456-7890</a></li>
-                    <li><a href="mailto:info@alhijaz.test" target="_blank" rel="noopener" aria-label="Email Hijaz"
-                            class="hover:text-secondary transition-colors">info@alhijaz.test</a>
-                    </li>
-                    <li><a href="https://www.google.com/maps?q=-6.889876,109.675432" target="_blank" rel="noopener"
-                            aria-label="Lokasi Hijaz" class="hover:text-secondary transition-colors">Pekalongan, Jawa
-                            Tengah</a>
-                    </li>
+                    @if ($settings->whatsapp_number)
+                        <li><a href="https://wa.me/{{ $settings->whatsapp_number }}" target="_blank" rel="noopener"
+                                aria-label="WhatsApp Hijaz"
+                                class="hover:text-secondary transition-colors">{{ $settings->whatsapp_number_formatted }}</a>
+                        </li>
+                    @endif
+                    @if ($settings->email)
+                        <li><a href="mailto:{{ $settings->email }}" target="_blank" rel="noopener"
+                                aria-label="Email Hijaz"
+                                class="hover:text-secondary transition-colors">{{ $settings->email }}</a>
+                        </li>
+                    @endif
+                    @if ($settings->address)
+                        <li>
+                            @if ($settings->google_maps_url)
+                                <a href="{{ $settings->google_maps_url }}" target="_blank" rel="noopener"
+                                    aria-label="Lokasi Hijaz"
+                                    class="hover:text-secondary transition-colors">{{ $settings->address }}</a>
+                            @else
+                                {{ $settings->address }}
+                            @endif
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>

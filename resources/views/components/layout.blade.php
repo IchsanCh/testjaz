@@ -63,12 +63,7 @@
         <meta name="twitter:image" content="{{ asset('storage/' . $resolvedOgImage) }}">
     @endif
 
-    @if ($settings->logo)
-        <link rel="icon" href="{{ asset('storage/' . $settings->logo) }}">
-
-    @else
-        <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    @endif
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
     {{-- Preload font kritis yang kepake di hero, biar gak nunggu request lain dulu --}}
     <link rel="preload" href="{{ asset('fonts/fraunces-v38-latin-600.woff2') }}" as="font" type="font/woff2"

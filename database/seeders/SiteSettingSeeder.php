@@ -16,6 +16,8 @@ class SiteSettingSeeder extends Seeder
                 'whatsapp_number' => '6281234567890', // ganti ke nomor asli klien
                 'email' => 'info@alhijaz.test',
                 'address' => 'Pekalongan, Jawa Tengah',
+                'latitude' => -6.889876,
+                'longitude' => 109.675432,
                 'default_meta_title' => 'AL HIJAZ — Sarung Tenun Premium',
                 'default_meta_description' => 'Sarung tenun premium turun-temurun, ditenun dengan filosofi warisan Timur Tengah.',
                 'owner_name' => 'Owner AL HIJAZ',

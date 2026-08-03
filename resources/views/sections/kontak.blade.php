@@ -24,25 +24,36 @@
             </p>
 
             <div class="space-y-4 font-sans text-sm md:text-base">
-                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener"
-                    class="flex items-center gap-3 text-base-content font-semibold hover:text-brand transition-colors">
-                    <span class="text-base-content/80">WhatsApp</span>
-                    <span>+62 812-3456-7890</span>
-                </a>
-                <div class="flex items-center gap-3 text-base-content/80">
-                    <a href="mailto:info@alhijaz.test" target="_blank" rel="noopener"
+                @if ($settings->whatsapp_number)
+                    <a href="https://wa.me/{{ $settings->whatsapp_number }}" target="_blank" rel="noopener"
                         class="flex items-center gap-3 text-base-content font-semibold hover:text-brand transition-colors">
-                        <span class="text-base-content/80">Email</span>
-                        <span>info@alhijaz.test</span>
+                        <span class="text-base-content/80">WhatsApp</span>
+                        <span>{{ $settings->whatsapp_number_formatted }}</span>
                     </a>
-                </div>
-                <div class="flex items-center gap-3 text-base-content/80">
-                    <a href="https://www.google.com/maps?q=-6.889876,109.675432" target="_blank" rel="noopener"
-                        class="flex items-center gap-3 text-base-content font-semibold hover:text-brand transition-colors">
-                        <span class="text-base-content/80">Lokasi</span>
-                        <span>Pekalongan, Jawa Tengah</span>
-                    </a>
-                </div>
+                @endif
+                @if ($settings->email)
+                    <div class="flex items-center gap-3 text-base-content/80">
+                        <a href="mailto:{{ $settings->email }}" target="_blank" rel="noopener"
+                            class="flex items-center gap-3 text-base-content font-semibold hover:text-brand transition-colors">
+                            <span class="text-base-content/80">Email</span>
+                            <span>{{ $settings->email }}</span>
+                        </a>
+                    </div>
+                @endif
+                @if ($settings->address)
+                    <div class="flex items-center gap-3 text-base-content/80">
+                        @if ($settings->google_maps_url)
+                            <a href="{{ $settings->google_maps_url }}" target="_blank" rel="noopener"
+                                class="flex items-center gap-3 text-base-content font-semibold hover:text-brand transition-colors">
+                                <span class="text-base-content/80">Lokasi</span>
+                                <span>{{ $settings->address }}</span>
+                            </a>
+                        @else
+                            <span class="text-base-content/80">Lokasi</span>
+                            <span class="text-base-content font-semibold">{{ $settings->address }}</span>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
 
