@@ -165,6 +165,6 @@
     </main>
 
     @include('sections.footer', [
-        'showCta' => true,
+        'showCta' => false,
     ])
 </x-layout>

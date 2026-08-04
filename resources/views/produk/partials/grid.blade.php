@@ -16,7 +16,7 @@
     </div>
 @else
     @foreach ($products as $i => $product)
-        <a href="{{ url('/produk') }}" data-cursor-text="Lihat"
+        <a href="{{ route('produk.show', $product) }}" data-cursor-text="Lihat"
             class="group block tilt-card reveal reveal-delay-{{ ($i % 3) + 1 }} rounded-2xl bg-base-100 border border-base-300/60 shadow-sm overflow-hidden">
             <div class="relative overflow-hidden aspect-[4/3] reveal-image bg-base-300">
                 <img src="{{ $product->thumbnail?->image ? asset('storage/' . $product->thumbnail->image) : asset('images/box-masterpiece.webp') }}"
@@ -26,7 +26,11 @@
             </div>
             <div class="p-6">
                 <h3 class="font-serif text-lg md:text-xl font-semibold leading-snug">
-                    {{ $product->name }}
+                    @if ($keyword !== '' && isset($product->name_highlighted))
+                        {!! $product->name_highlighted !!}
+                    @else
+                        {{ $product->name }}
+                    @endif
                 </h3>
                 @if ($product->category)
                     <span class="text-brand font-sans text-sm font-medium">
@@ -37,6 +41,16 @@
                 @if ($product->spec_label)
                     <p class="text-base-content/60 font-sans text-sm leading-relaxed mt-3">
                         {{ $product->spec_label }}
+                    </p>
+                @endif
+
+                @if (!empty($product->search_snippet))
+                    <p class="text-base-content/50 font-sans text-sm leading-relaxed mt-2">
+                        {!! $product->search_snippet !!}
+                    </p>
+                @elseif ($product->excerpt)
+                    <p class="text-base-content/50 font-sans text-sm leading-relaxed mt-2">
+                        {{ $product->excerpt }}
                     </p>
                 @endif
 

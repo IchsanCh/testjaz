@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class ProductSeeder extends Seeder
                 'size_width' => 210,
                 'size_length' => 128,
                 'edition' => 'Premium',
+                'description' => 'Motif songket klasik dengan sentuhan benang emas, ditenun untuk momen-momen istimewa yang layak dirayakan.',
                 'images' => ['box-masterpiece.webp', 'series-songket.webp'],
             ],
             [
@@ -28,6 +30,7 @@ class ProductSeeder extends Seeder
                 'size_width' => 210,
                 'size_length' => 128,
                 'edition' => null,
+                'description' => 'Tenunan dobby dengan tekstur halus dan jatuh kain yang nyaman, pilihan tepat untuk pemakaian harian yang tetap terlihat rapi.',
                 'images' => ['box-excellent.webp', 'series-dobby.webp'],
             ],
             [
@@ -37,6 +40,7 @@ class ProductSeeder extends Seeder
                 'size_width' => 210,
                 'size_length' => 128,
                 'edition' => null,
+                'description' => 'Sarung berbahan katun super yang adem dan ringan, ditenun rapat untuk daya tahan pemakaian jangka panjang.',
                 'images' => ['box-super.webp', 'series-super.webp'],
             ],
             [
@@ -46,6 +50,7 @@ class ProductSeeder extends Seeder
                 'size_width' => 210,
                 'size_length' => 128,
                 'edition' => 'Limited',
+                'description' => 'Motif parang yang tegas dan berwibawa, edisi terbatas dengan detail tenun yang lebih presisi.',
                 'images' => ['box-berlian.webp', 'parang-dark.webp'],
             ],
             [
@@ -55,6 +60,7 @@ class ProductSeeder extends Seeder
                 'size_width' => 210,
                 'size_length' => 128,
                 'edition' => null,
+                'description' => 'Bahan rayon yang lembut di kulit dengan jatuh kain yang ringan, favorit untuk dipakai sehari-hari.',
                 'images' => ['box-spesial.webp', 'series-rayon.webp'],
             ],
             [
@@ -64,6 +70,7 @@ class ProductSeeder extends Seeder
                 'size_width' => 210,
                 'size_length' => 128,
                 'edition' => null,
+                'description' => 'Tenunan coletan bertekstur khas, dipadukan bahan katun yang kuat namun tetap nyaman dipakai seharian.',
                 'images' => ['box-coletan.webp', 'series-coletan.webp'],
             ],
         ];
@@ -74,11 +81,13 @@ class ProductSeeder extends Seeder
             $product = Product::updateOrCreate(
                 ['name' => $data['name']],
                 [
+                    'slug' => Str::slug($data['name']),
                     'product_category_id' => $category?->id,
                     'material' => $data['material'],
                     'size_width' => $data['size_width'],
                     'size_length' => $data['size_length'],
                     'edition' => $data['edition'],
+                    'description' => $data['description'],
                     'sort_order' => $i,
                 ]
             );

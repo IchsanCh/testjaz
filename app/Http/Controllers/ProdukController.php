@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Support\Highlighter;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -37,6 +38,28 @@ class ProdukController extends Controller
             ->paginate(9)
             ->withQueryString();
 
+        // Sama kayak di ArtikelController: highlight kata kunci di nama produk,
+        // dan kalau nama-nya sendiri gak match, siapin cuplikan dari description
+        // (atau material sebagai fallback terakhir) biar user tau kenapa produk
+        // itu muncul di hasil pencarian.
+        if ($keyword !== '') {
+            $products->getCollection()->each(function (Product $product) use ($keyword) {
+                $nameMatches = mb_stripos($product->name, $keyword) !== false;
+
+                $product->name_highlighted = Highlighter::mark(e($product->name), $keyword);
+
+                if ($nameMatches) {
+                    $product->search_snippet = null;
+                } elseif ($product->description && mb_stripos($product->description, $keyword) !== false) {
+                    $product->search_snippet = Highlighter::snippet($product->description, $keyword);
+                } elseif ($product->material && mb_stripos($product->material, $keyword) !== false) {
+                    $product->search_snippet = Highlighter::mark(e($product->material), $keyword);
+                } else {
+                    $product->search_snippet = null;
+                }
+            });
+        }
+
         $view = $request->ajax() ? 'produk.partials.grid' : 'produk.index';
 
         return view($view, [
@@ -44,6 +67,24 @@ class ProdukController extends Controller
             'categories' => $categories,
             'keyword' => $keyword,
             'selectedCategories' => $selectedCategories,
+        ]);
+    }
+
+    public function show(Product $product): View
+    {
+        $product->load(['category', 'images']);
+
+        $related = Product::query()
+            ->with(['category', 'images'])
+            ->where('product_category_id', $product->product_category_id)
+            ->where('id', '!=', $product->id)
+            ->orderBy('sort_order')
+            ->limit(3)
+            ->get();
+
+        return view('produk.show', [
+            'product' => $product,
+            'related' => $related,
         ]);
     }
 }

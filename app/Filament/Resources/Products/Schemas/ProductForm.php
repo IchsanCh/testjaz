@@ -9,6 +9,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class ProductForm
 {
@@ -24,7 +25,17 @@ class ProductForm
                     ->required(),
                 TextInput::make('name')
                     ->label('Nama Motif')
+                    ->live(debounce: 500)
+                    ->afterStateUpdated(function (?string $state, callable $set) {
+                        $set('slug', Str::slug($state ?? ''));
+                    })
                     ->required(),
+                TextInput::make('slug')
+                    ->label('Slug (URL)')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->disabled()
+                    ->dehydrated(),
                 TextInput::make('material')
                     ->label('Bahan')
                     ->placeholder('Contoh: TR + TR'),

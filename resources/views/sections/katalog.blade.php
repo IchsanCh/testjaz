@@ -1,6 +1,6 @@
 {{--
     Section: Katalog Produk (highlight)
-    Belum ke-connect ke DB — nanti diambil dari Product::orderBy('sort_order')->limit(6)->get()
+    Konek ke DB — $featuredProducts dari HomeController::index()
     Halaman lengkap (semua produk + filter kategori) ada di /produk, link di tombol bawah
 --}}
 <section class="py-24 md:py-32 bg-base-100" id="katalog">
@@ -18,7 +18,7 @@
                     <span class="reveal-line"><span>Motif Pilihan Kami</span></span>
                 </h2>
             </div>
-            <a href="{{ url('/produk') }}"
+            <a href="{{ route('produk.index') }}"
                 class="inline-flex items-center gap-2 font-sans font-medium text-brand hover:gap-3 transition-all duration-300 shrink-0">
                 Lihat Semua Produk
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
@@ -30,34 +30,22 @@
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-
-            @php
-                $products = [
-                    ['image' => 'series-songket.webp', 'name' => 'Songket'],
-                    ['image' => 'series-dobby.webp', 'name' => 'Dobby'],
-                    ['image' => 'series-super.webp', 'name' => 'Super'],
-                    ['image' => 'series-parang.webp', 'name' => 'Parang'],
-                    ['image' => 'series-rayon.webp', 'name' => 'Rayon'],
-                    ['image' => 'series-coletan.webp', 'name' => 'Coletan'],
-                ];
-            @endphp
-
-            @foreach ($products as $i => $product)
-                <a href="{{ url('/produk') }}" data-cursor-text="Lihat"
+            @foreach ($featuredProducts as $i => $product)
+                <a href="{{ route('produk.show', $product) }}" data-cursor-text="Lihat"
                     class="group block tilt-card reveal reveal-delay-{{ ($i % 3) + 1 }}">
                     <div class="relative overflow-hidden rounded-2xl aspect-[4/5] bg-transparent reveal-image">
-                        <img src="{{ asset('images/' . $product['image']) }}" alt="Sarung motif {{ $product['name'] }}"
+                        <img src="{{ $product->thumbnail?->image ? asset('storage/' . $product->thumbnail->image) : asset('images/box-masterpiece.webp') }}"
+                            alt="Sarung motif {{ $product->name }}"
                             class="parallax-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             loading="lazy">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent">
                         </div>
                         <span class="absolute bottom-4 left-4 font-serif text-white text-xl font-semibold">
-                            {{ $product['name'] }}
+                            {{ $product->name }}
                         </span>
                     </div>
                 </a>
             @endforeach
-
         </div>
     </div>
 </section>

@@ -14,6 +14,7 @@ return new class () extends Migration {
                 ->constrained()
                 ->nullOnDelete();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('material')->nullable(); // contoh: "TR + TR"
             $table->unsignedInteger('size_width')->nullable(); // cm
             $table->unsignedInteger('size_length')->nullable(); // cm

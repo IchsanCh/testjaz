@@ -1,4 +1,3 @@
-<?php $settings = \App\Models\SiteSetting::current(); ?>
 <x-layout showEntrance="true">
     <x-navbar />
 

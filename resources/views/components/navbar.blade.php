@@ -20,7 +20,7 @@ window.addEventListener('theme-changed', (e) => isDark = e.detail.theme === 'alh
             <a href="{{ url('/') }}#tentang"
                 :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                 class="text-sm font-sans transition-colors duration-300">Tentang</a>
-            <a href="{{ url('/') }}#katalog"
+            <a href="{{ route('produk.index') }}"
                 :class="scrolled ? 'text-base-content/70 hover:text-brand' : 'text-white/80 hover:text-white'"
                 class="text-sm font-sans transition-colors duration-300">Produk</a>
             <a href="{{ route('artikel.index') }}"
